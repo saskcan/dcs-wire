@@ -117,18 +117,47 @@ namespace UdpListener
 
         void updateControls(int address)
         {
+            UInt16 value;
+            StateUpdatedEventArgs args = new StateUpdatedEventArgs();
+            UInt16 partial = (UInt16)((state[address + 1] << 8) + state[address]);
+
             if(address == 0x10fa)
             {
                 // CDU Power
-                UInt16 mask = 0x4000;
-                int shift = 14;
-                UInt16 value = (UInt16)((((state[address + 1] << 8) + state[address]) & mask) >> shift);
-
-                StateUpdatedEventArgs args = new StateUpdatedEventArgs();
+                value = decode(partial, 0x4000, 14);
                 args.dimension = "AAP_CDUPWR";
                 args.value = value;
                 OnStateUpdated(args);
+
+                // EGI Power
+                value = decode(partial, 0x8000, 15);
+                args.dimension = "AAP_EGIPWR";
+                args.value = value;
+                OnStateUpdated(args);
+
+                //PAGE OTHER - POSITION - STEER - WAYPT
+                value = decode(partial, 0x3000, 12);
+                args.dimension = "AAP_PAGE";
+                args.value = value;
+                OnStateUpdated(args);
+
+                // Toggle Steerpoint
+                value = decode(partial, 0x0c00, 10);
+                args.dimension = "AAP_STEER";
+                args.value = value;
+                OnStateUpdated(args);
+
+                // STEERPT FLTPLAN - MARK - MISSION
+                value = decode(partial, 0x0300, 8);
+                args.dimension = "AAP_STEERPT";
+                args.value = value;
+                OnStateUpdated(args);
             }
+        }
+
+        public UInt16 decode(UInt16 partial, UInt16 mask, int shift)
+        {
+            return (UInt16)((partial & mask) >> shift);
         }
        
         public void StartListener()

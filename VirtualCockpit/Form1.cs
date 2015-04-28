@@ -47,39 +47,39 @@ namespace VirtualCockpit
         private void button1_Click(object sender, EventArgs e)
         {
             var currentState = Cockpit.components.AAP.CDUPWR.Position.ToString();
-            if (label1.Text == currentState)
+            if (AAP_CDUPWRlabel.Text == currentState)
             {
                 bump(Cockpit.components.AAP.CDUPWR);
             }
-            label1.Text = Cockpit.components.AAP.CDUPWR.Position.ToString();
+            AAP_CDUPWRlabel.Text = Cockpit.components.AAP.CDUPWR.Position.ToString();
         }
         
         // TODO: there are problems with the following event handlers
         private void button2_Click(object sender, EventArgs e)
         {
             bump(Cockpit.components.AAP.EGIPWR);
-            label2.Text = Cockpit.components.AAP.EGIPWR.Position.ToString();
+            AAP_EGIPWRlabel.Text = Cockpit.components.AAP.EGIPWR.Position.ToString();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             bump(Cockpit.components.AAP.PAGE);
-            label3.Text = Cockpit.components.AAP.PAGE.Position.ToString();
+            AAP_PAGElabel.Text = Cockpit.components.AAP.PAGE.Position.ToString();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             bump(Cockpit.components.AAP.STEER);
-            label4.Text = Cockpit.components.AAP.STEER.Position.ToString();
+            AAP_STEERlabel.Text = Cockpit.components.AAP.STEER.Position.ToString();
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             bump(Cockpit.components.AAP.STEERPT);
-            label5.Text = Cockpit.components.AAP.STEERPT.Position.ToString();
+            AAP_STEERPTlabel.Text = Cockpit.components.AAP.STEERPT.Position.ToString();
         }
 
-        delegate void SetTextCallback(string text);
+        delegate void SetTextCallback(string text, Label label);
 
         private void ValueChanged(object sender, EventArgs e)
         {
@@ -87,24 +87,51 @@ namespace VirtualCockpit
             string name = input.Name;
             int value = input.Position;
             Program.SendUDP(name + " " + value.ToString());
+            string[] desc = name.Split('_');
+
+            DCSWireUtils.Message msg = new DCSWireUtils.Message();
+            msg.controlGroup = desc[0];
+            msg.control = desc[1];
+            msg.type = "INT";
+            msg.value = value.ToString();
+            msg.Encode();
+            Program.SendSerial(msg, Program.port);
 
             if (name == "AAP_CDUPWR")
             {
-                SetText(value.ToString());
+                SetText(value.ToString(), this.AAP_CDUPWRlabel);
             }
+            else if (name == "AAP_EGIPWR")
+            {
+                SetText(value.ToString(), this.AAP_EGIPWRlabel);
+            }
+            else if (name == "AAP_PAGE")
+            {
+                SetText(value.ToString(), this.AAP_PAGElabel);
+            }
+            else if (name == "AAP_STEER")
+            {
+                SetText(value.ToString(), this.AAP_STEERlabel);
+            }
+            else if (name == "AAP_STEERPT")
+            {
+                SetText(value.ToString(), this.AAP_STEERPTlabel);
+            }
+            
         }
 
-        private void SetText(string text)
+        private void SetText(string text, Label label)
         {
-            if (this.label1.InvokeRequired)
+            if (label.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(SetText);
-                this.Invoke(d, new object[] { text });
+                this.Invoke(d, new object[] { text, label });
             }
             else
             {
-                this.label1.Text = text;
+                label.Text = text;
             }
         }
+
     }
 }

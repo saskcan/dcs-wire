@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCSBiosImportExample", "DCSBiosImportExample\DCSBiosImportExample.csproj", "{46ECBCB3-5025-4991-9C92-AC6480CA68A4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadComPortExample", "ReadComPortExample\ReadComPortExample.csproj", "{3FCFCB78-1CF0-4BB3-9CF0-16EAA85829EE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualCockpit", "VirtualCockpit\VirtualCockpit.csproj", "{0BC475C8-1536-4B31-848E-B5C225F09074}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UdpListener", "UdpListener\UdpListener.csproj", "{BC59BFF0-C8B2-4563-B9DF-3BA00A42C635}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComListener", "ComListener\ComListener.csproj", "{68CCD54B-A101-444D-8909-01B6EE02970B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C1ADCB4E-AD19-4F40-B9B1-957D95BB21E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCSWireUtils", "DCSWireMessage\DCSWireUtils.csproj", "{FCB9CF9A-B36B-4184-84F9-56382EC59653}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{46ECBCB3-5025-4991-9C92-AC6480CA68A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{46ECBCB3-5025-4991-9C92-AC6480CA68A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{46ECBCB3-5025-4991-9C92-AC6480CA68A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{46ECBCB3-5025-4991-9C92-AC6480CA68A4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3FCFCB78-1CF0-4BB3-9CF0-16EAA85829EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3FCFCB78-1CF0-4BB3-9CF0-16EAA85829EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3FCFCB78-1CF0-4BB3-9CF0-16EAA85829EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3FCFCB78-1CF0-4BB3-9CF0-16EAA85829EE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0BC475C8-1536-4B31-848E-B5C225F09074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0BC475C8-1536-4B31-848E-B5C225F09074}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BC475C8-1536-4B31-848E-B5C225F09074}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -35,10 +25,10 @@ Global
 		{BC59BFF0-C8B2-4563-B9DF-3BA00A42C635}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC59BFF0-C8B2-4563-B9DF-3BA00A42C635}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC59BFF0-C8B2-4563-B9DF-3BA00A42C635}.Release|Any CPU.Build.0 = Release|Any CPU
-		{68CCD54B-A101-444D-8909-01B6EE02970B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{68CCD54B-A101-444D-8909-01B6EE02970B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{68CCD54B-A101-444D-8909-01B6EE02970B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{68CCD54B-A101-444D-8909-01B6EE02970B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCB9CF9A-B36B-4184-84F9-56382EC59653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCB9CF9A-B36B-4184-84F9-56382EC59653}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCB9CF9A-B36B-4184-84F9-56382EC59653}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCB9CF9A-B36B-4184-84F9-56382EC59653}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

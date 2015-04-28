@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
+using DCSWireUtils;
 
 namespace ComListener
 {
     class Program
     {
-        static char[] buffer;
-        static int next = 0;
+        static Message msg = new Message();
+        static char[] buffer = new char[64];
+        static int serialIndex = 0;
 
         static void Main(string[] args)
         {
@@ -27,26 +29,26 @@ namespace ComListener
             string indata = sp.ReadExisting();
             foreach(char c in indata)
             {
-                if(next == 0)
+                // wait for start
+                if(serialIndex == 0)
                 {
-                    if(c == '$')
+                    if(c != '$')
                     {
-                        buffer[next] = c;
-                        next = next + 1;
+                        break;
                     }
+                }
+                buffer[serialIndex] = c;
+                // check for end of message
+                if(c == 13)
+                {
+                    msg.Decode(buffer);
+                    serialIndex = 0;
                 }
                 else
                 {
-                    buffer[next] = c;
-                    if(c == 13)
-                    {
-                        var msg = new Message();
-                        Array.Copy(buffer, msg.raw, )
-                    }
+                    serialIndex = serialIndex + 1;
                 }
-
             }
-            Console.WriteLine(indata);
         }
     }
 }

@@ -83,6 +83,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DCSWireMessage\DCSWireUtils.csproj">
+      <Project>{fcb9cf9a-b36b-4184-84f9-56382ec59653}</Project>
+      <Name>DCSWireUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UdpListener\UdpListener.csproj">
       <Project>{bc59bff0-c8b2-4563-b9df-3ba00a42c635}</Project>
       <Name>UdpListener</Name>
