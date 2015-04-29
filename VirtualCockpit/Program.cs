@@ -13,20 +13,10 @@ using DCSWireUtils;
 
 namespace VirtualCockpit
 {
-
-
-    public static class Cockpit
-    {
-        public static Components components = new Components();
-    }
-
-
     static class Program
     {
         static DCSWireUtils.Message msg = new DCSWireUtils.Message();
-        static char[] buffer = new char[64];
-        static int serialIndex = 0;
-        static public SerialPort port = new SerialPort("COM3");
+		static public Cockpit cockpit;
 
         /// <summary>
         /// The main entry point for the application.
@@ -34,26 +24,34 @@ namespace VirtualCockpit
         [STAThread]
         static void Main()
         {
+			// initialize the cockpit
+			cockpit = VirtualCockpit.Components.initialize();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             // create a new thread for the UDP listener
             UdpListener.UdpListener listener = new UdpListener.UdpListener();
-            listener.StateUpdated += HandleUpdates;
+            listener.StateUpdated += HandleMessage;
             Thread listenerThread = new Thread(listener.StartListener);
             listenerThread.Start();
 
-            // open the serial port
-            //var port = new SerialPort("COM3");
-            port.BaudRate = 9600;
-            port.Open();
-            port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
+			// create a new SerialAgent to send and receive serial data
+			DCSWire.SerialAgent serialAgent = new DCSWire.SerialAgent("COM3", 9600);
+			serialAgent.MessageReady += HandleMessage;
+			// start listening
+			serialAgent.port.Open();
 
             // run the forms application
             Application.Run(new Form1());
 
         }
+
+		static public void HandleMessage(object sender, MessageReadyEventArgs e)
+		{
+			// here we should be able to handle any generic message regardless of who sent it
+			cockpit.panels[e.message.controlGroup].multiPositionSwitches[e.message.control].SetState(e.message.value);
+		}
 
         static public void HandleUpdates(object sender, UdpListener.StateUpdatedEventArgs e)
         {
@@ -62,10 +60,12 @@ namespace VirtualCockpit
             var control = args[1];
 
             // AAP
+			cockpit.panels["controlGroup"].
             if(controlGroup == "AAP")
             {
                 if (control == "CDUPWR")
                 {
+					
                     Cockpit.components.AAP.CDUPWR.SetState(e.value);
                 }
                 else if (control == "EGIPWR")
@@ -102,46 +102,6 @@ namespace VirtualCockpit
             {
 
             }
-        }
-
-        private static void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
-        {
-            SerialPort sp = (SerialPort)sender;
-            string indata = sp.ReadExisting();
-            foreach (char c in indata)
-            {
-                // wait for start
-                if (serialIndex == 0)
-                {
-                    if (c != '$')
-                    {
-                        break;
-                    }
-                }
-                buffer[serialIndex] = c;
-                // check for end of message
-                if (c == 13)
-                {
-                    msg.Decode(buffer);
-                    serialIndex = 0;
-                    UdpListener.StateUpdatedEventArgs args = new UdpListener.StateUpdatedEventArgs();
-                    args.dimension = msg.controlGroup + "_" + msg.control;
-                    UInt16 value;
-                    UInt16.TryParse(msg.value, out value);
-                    args.value = value;
-                    HandleUpdates(null, args);
-                }
-                else
-                {
-                    serialIndex = serialIndex + 1;
-                }
-            }
-        }
-
-        static public void SendSerial(DCSWireUtils.Message msg, SerialPort port)
-        {
-            int length = Array.IndexOf(msg.raw, (char)13) + 1;
-            port.Write(msg.raw, 0, length);
         }
     }
 }

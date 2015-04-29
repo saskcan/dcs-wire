@@ -6,13 +6,32 @@ using System.Threading.Tasks;
 
 namespace DCSWireUtils
 {
-    public class Message
-    {
-
+	/// <summary>
+	/// A generic message container designed with the needs of DCS in mind
+	/// </summary>
+	public class Message
+	{
         public string controlGroup;
         public string control;
         public string type;
         public string value;
+
+		public Message(dynamic x)
+		{
+			controlGroup = x.controlGroup;
+			control = x.control;
+			type = x.type;
+			value = x.value;
+		}
+
+		public Message() { }
+	}
+
+	/// <summary>
+	/// A message designed to be read from/written to a serial interface
+	/// </summary>
+    public class SerialMessage : Message
+    {
         public char[] raw;
 
         public void Encode()
@@ -78,9 +97,35 @@ namespace DCSWireUtils
             return true;
         }
 
-        public Message()
+        public SerialMessage()
         {
             raw = new char[64];
         }
+
+		public SerialMessage(char[] buffer)
+		{
+			raw = new char[64];
+			Decode(buffer);
+		}
+
+		public SerialMessage(Message msg)
+		{
+			raw = new char[64];
+			controlGroup = msg.controlGroup;
+			control = msg.control;
+			type = msg.type;
+			value = msg.value;
+			Encode();
+		}
+    }
+
+    public class MessageReadyEventArgs : EventArgs
+    {
+        public Message message { get; set; }
+
+		public MessageReadyEventArgs(Message msg)
+		{
+			message = msg;
+		}
     }
 }

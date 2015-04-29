@@ -5,19 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
+using DCSWireUtils;
 
-namespace UdpListener
+namespace DCSWire 
 {
 
     /// <summary>
     /// Event arguments included when the simulation state is updated
     /// </summary>
-    public class StateUpdatedEventArgs : EventArgs
-    {
-        public string dimension { get; set; }
-        public UInt16 value { get; set; }
-        public string message { get; set; }
-    }
+	//public class StateUpdatedEventArgs : EventArgs
+	//{
+	//	public string dimension { get; set; }
+	//	public UInt16 value { get; set; }
+	//	public string message { get; set; }
+	//}
 
 
     public class UdpListener
@@ -104,11 +105,11 @@ namespace UdpListener
 
 
         // used to send an event when the state is updated
-        public event EventHandler<StateUpdatedEventArgs> StateUpdated;
+        public event EventHandler<MessageReadyEventArgs> StateUpdated;
 
-        protected virtual void OnStateUpdated(StateUpdatedEventArgs e)
+        protected virtual void OnStateUpdated(MessageReadyEventArgs e)
         {
-            EventHandler<StateUpdatedEventArgs> handler = StateUpdated;
+            EventHandler<MessageReadyEventArgs> handler = StateUpdated;
             if(handler != null)
             {
                 handler(this, e);
@@ -118,16 +119,24 @@ namespace UdpListener
         void updateControls(int address)
         {
             UInt16 value;
-            StateUpdatedEventArgs args = new StateUpdatedEventArgs();
             UInt16 partial = (UInt16)((state[address + 1] << 8) + state[address]);
-
+			string controlGroup;
             if(address == 0x10fa)
             {
+				controlGroup = "AAP";
+
                 // CDU Power
-                value = decode(partial, 0x4000, 14);
-                args.dimension = "AAP_CDUPWR";
-                args.value = value;
-                OnStateUpdated(args);
+				Message msg = new Message();
+				msg.controlGroup = controlGroup;
+				msg.control = "CDUPWR";
+				msg.type = "INT";
+				msg.value = (decode(partial, 0x4000, 14).ToString()); 
+				MessageReadyEventArgs args = new MessageReadyEventArgs(msg);
+				OnStateUpdated(args);
+				//value = 
+				//args.dimension = "AAP_CDUPWR";
+				//args.value = value;
+				//OnStateUpdated(args);
 
                 // EGI Power
                 value = decode(partial, 0x8000, 15);
@@ -153,6 +162,8 @@ namespace UdpListener
                 args.value = value;
                 OnStateUpdated(args);
             }
+			msg.controlGroup = 
+            MessageReadyEventArgs args = new MessageReadyEventArgs(;
         }
 
         public UInt16 decode(UInt16 partial, UInt16 mask, int shift)

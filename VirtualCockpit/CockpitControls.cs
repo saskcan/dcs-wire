@@ -8,6 +8,12 @@ using System.Runtime.CompilerServices;
 
 namespace VirtualCockpit
 {
+
+	public class Cockpit
+	{
+		public Dictionary<string, Panels.Panel> panels;
+	}
+
     namespace Controllable
     {
 
@@ -40,6 +46,16 @@ namespace VirtualCockpit
                     OnChanged(EventArgs.Empty);
                 }
             }
+
+			public void SetState(string pos)
+			{
+				int position;
+				if(int.TryParse(pos, out position))
+				{
+					SetState(position);
+				}
+
+			}
 
             public event EventHandler Changed;
 
@@ -92,9 +108,23 @@ namespace VirtualCockpit
 
     }
 
-    namespace Panels
-    {
-        public class AAP
+
+	#region Panels
+	namespace Panels
+	{
+		public class Panel
+		{
+			public string name;
+			public Dictionary<string, Controllable.MultiPositionSwitch> multiPositionSwitches;
+			public Panel(string n)
+			{
+				name = n;
+			}
+		}
+
+
+		#region AAP
+		public class AAP
         {
             // CDU Power
             public Controllable.MultiPositionSwitch CDUPWR = new Controllable.MultiPositionSwitch("AAP_CDUPWR", 0, 2);
@@ -110,6 +140,11 @@ namespace VirtualCockpit
 
             // STEERPT FLTPLAN - MARK - MISSION
             public Controllable.MultiPositionSwitch STEERPT = new Controllable.MultiPositionSwitch("AAP_STEERPT", 0, 3);
-        }
-    }
+		}
+		#endregion
+
+	#endregion
+
+
+	}
 }
