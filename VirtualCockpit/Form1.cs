@@ -7,117 +7,125 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DCSWire;
+using DCSWireUtils;
 
 namespace VirtualCockpit
 {
     public partial class Form1 : Form
     {
+		// An event that clients can use to be notified whenever a message is ready
+		public event MessageReadyEventHandler MessageReady;
+
+		// Invoke the Ready event; called whenever a message is ready
+		protected virtual void OnMessageReady(MessageReadyEventArgs e)
+		{
+			if (MessageReady != null)
+				MessageReady(this, e);
+		}
 
         public Form1()
         {
             InitializeComponent();
-
-            Cockpit.components.AAP.CDUPWR.Changed += ValueChanged;
-            Cockpit.components.AAP.EGIPWR.Changed += ValueChanged;
-            Cockpit.components.AAP.PAGE.Changed += ValueChanged;
-            Cockpit.components.AAP.STEER.Changed += ValueChanged;
-            Cockpit.components.AAP.STEERPT.Changed += ValueChanged;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Program.cockpit.StateUpdated += ValueChanged;
 
         }
 
-        private void bump(Controllable.MultiPositionSwitch input)
+        private string nextValueString(int pos, int max)
         {
-            int currentPosition = input.Position;
-            int newPosition;
-            if (currentPosition < input.MaxPosition)
+            if(pos < max)
             {
-                newPosition = currentPosition + 1;
+                return (pos + 1).ToString();
             }
             else
             {
-                newPosition = 0;
+                return "0";
             }
-            input.SetState(newPosition);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var currentState = Cockpit.components.AAP.CDUPWR.Position.ToString();
-            if (AAP_CDUPWRlabel.Text == currentState)
-            {
-                bump(Cockpit.components.AAP.CDUPWR);
-            }
-            AAP_CDUPWRlabel.Text = Cockpit.components.AAP.CDUPWR.Position.ToString();
+            // find the current value of the label
+            var currentValue = Convert.ToInt16(AAP_CDUPWRlabel.Text);
+
+            // send the next value in the message
+            var msg = new DCSWireUtils.Message("AAP", "CDUPWR", "INT", nextValueString(currentValue, 1));
+            OnMessageReady(new MessageReadyEventArgs(msg));
         }
         
-        // TODO: there are problems with the following event handlers
         private void button2_Click(object sender, EventArgs e)
         {
-            bump(Cockpit.components.AAP.EGIPWR);
-            AAP_EGIPWRlabel.Text = Cockpit.components.AAP.EGIPWR.Position.ToString();
+            // find the current value of the label
+            var currentValue = Convert.ToInt16(AAP_EGIPWRlabel.Text);
+
+            // send the next value in the message
+            var msg = new DCSWireUtils.Message("AAP", "EGIPWR", "INT", nextValueString(currentValue, 1));
+            OnMessageReady(new MessageReadyEventArgs(msg));
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            bump(Cockpit.components.AAP.PAGE);
-            AAP_PAGElabel.Text = Cockpit.components.AAP.PAGE.Position.ToString();
+            // find the current value of the label
+            var currentValue = Convert.ToInt16(AAP_PAGElabel.Text);
+
+            // send the next value in the message
+            var msg = new DCSWireUtils.Message("AAP", "PAGE", "INT", nextValueString(currentValue, 3));
+            OnMessageReady(new MessageReadyEventArgs(msg));
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            bump(Cockpit.components.AAP.STEER);
-            AAP_STEERlabel.Text = Cockpit.components.AAP.STEER.Position.ToString();
+            // find the current value of the label
+            var currentValue = Convert.ToInt16(AAP_STEERlabel.Text);
+
+            // send the next value in the message
+            var msg = new DCSWireUtils.Message("AAP", "STEER", "INT", nextValueString(currentValue, 2));
+            OnMessageReady(new MessageReadyEventArgs(msg));
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            bump(Cockpit.components.AAP.STEERPT);
-            AAP_STEERPTlabel.Text = Cockpit.components.AAP.STEERPT.Position.ToString();
-        }
+            // find the current value of the label
+            var currentValue = Convert.ToInt16(AAP_STEERPTlabel.Text);
 
+            // send the next value in the message
+            var msg = new DCSWireUtils.Message("AAP", "STEERPT", "INT", nextValueString(currentValue, 2));
+            OnMessageReady(new MessageReadyEventArgs(msg));
+        }
+        
         delegate void SetTextCallback(string text, Label label);
 
-        private void ValueChanged(object sender, EventArgs e)
+        private void ValueChanged(object sender, MessageReadyEventArgs e)
         {
-            var input = (VirtualCockpit.Controllable.MultiPositionSwitch)sender;
-            string name = input.Name;
-            int value = input.Position;
-            Program.SendUDP(name + " " + value.ToString());
-            string[] desc = name.Split('_');
-
-            DCSWireUtils.Message msg = new DCSWireUtils.Message();
-            msg.controlGroup = desc[0];
-            msg.control = desc[1];
-            msg.type = "INT";
-            msg.value = value.ToString();
-            msg.Encode();
-            Program.SendSerial(msg, Program.port);
-
-            if (name == "AAP_CDUPWR")
+            // AAP
+            if (e.message.controlGroup == "AAP")
             {
-                SetText(value.ToString(), this.AAP_CDUPWRlabel);
+                // CDUPWR
+                if(e.message.control == "CDUPWR")
+                {
+                    SetText(e.message.value, this.AAP_CDUPWRlabel);
+                }
+                else if(e.message.control == "EGIPWR")
+                {
+                    SetText(e.message.value, this.AAP_EGIPWRlabel);
+                }
+                else if(e.message.control == "PAGE")
+                {
+                    SetText(e.message.value, this.AAP_PAGElabel);
+                }
+                else if(e.message.control == "STEER")
+                {
+                    SetText(e.message.value, this.AAP_STEERlabel);
+                }
+                else if(e.message.control == "STEERPT")
+                {
+                    SetText(e.message.value, this.AAP_STEERPTlabel);
+                }
             }
-            else if (name == "AAP_EGIPWR")
-            {
-                SetText(value.ToString(), this.AAP_EGIPWRlabel);
-            }
-            else if (name == "AAP_PAGE")
-            {
-                SetText(value.ToString(), this.AAP_PAGElabel);
-            }
-            else if (name == "AAP_STEER")
-            {
-                SetText(value.ToString(), this.AAP_STEERlabel);
-            }
-            else if (name == "AAP_STEERPT")
-            {
-                SetText(value.ToString(), this.AAP_STEERPTlabel);
-            }
-            
         }
 
         private void SetText(string text, Label label)

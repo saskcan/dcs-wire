@@ -5,23 +5,73 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using DCSWireUtils;
+using DCSWire;
 
 namespace VirtualCockpit
 {
-
 	public class Cockpit
 	{
 		public Dictionary<string, Panels.Panel> panels;
+
+        // used to send an event when the state is updated
+        public event EventHandler<MessageReadyEventArgs> StateUpdated;
+
+        protected virtual void OnStateUpdated(MessageReadyEventArgs e)
+        {
+            EventHandler<MessageReadyEventArgs> handler = StateUpdated;
+            if(handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public virtual void HandleChildMessage(object sender, MessageReadyEventArgs e)
+        {
+            OnStateUpdated(e);
+        }
+
+		public Cockpit()
+        {
+            panels = new Dictionary<string, Panels.Panel>()
+            {
+                {
+                    "AAP", new Panels.Panel("AAP", new Controllable.MultiPositionSwitch[] {
+                        new Controllable.MultiPositionSwitch("CDUPWR", 0, 2),
+                        new Controllable.MultiPositionSwitch("EGIPWR", 0, 2),
+                        new Controllable.MultiPositionSwitch("PAGE", 0, 4),
+                        new Controllable.MultiPositionSwitch("STEER", 0, 3),
+                        new Controllable.MultiPositionSwitch("STEERPT", 0, 3)})
+                },
+                {
+                    "AHCP", new Panels.Panel("AHCP", new Controllable.MultiPositionSwitch[] {
+                        new Controllable.MultiPositionSwitch("AHCP_ALT_SCE", 0, 3),
+                        new Controllable.MultiPositionSwitch("AHCP_CICU", 0, 2),
+                        new Controllable.MultiPositionSwitch("AHCP_GUNPAC", 0, 3),
+                        new Controllable.MultiPositionSwitch("AHCP_HUD_DAYNIGHT", 0, 2),
+                        new Controllable.MultiPositionSwitch("AHCP_H33UD_MODE", 0, 2),
+                        new Controllable.MultiPositionSwitch("AHCP_IFFCC", 0, 3),
+                        new Controllable.MultiPositionSwitch("AHCP_JTRS", 0, 2),
+                        new Controllable.MultiPositionSwitch("AHCP_LASER_ARM", 0, 3),
+                        new Controllable.MultiPositionSwitch("AHCP_MASTER_ARM", 0, 3),
+                        new Controllable.MultiPositionSwitch("AHCP_TGP", 0, 2)})
+                }
+            };
+
+            foreach (var key in panels.Keys)
+            {
+                panels[key].StateUpdated += HandleChildMessage;
+            }
+		}
 	}
 
     namespace Controllable
     {
-
         public class DiscreteInput
         {
             private string name;
             private int position;
-
+            
             public string Name
             {
                 get
@@ -29,7 +79,7 @@ namespace VirtualCockpit
                     return name;
                 }
             }
-
+            
             public int Position
             {
                 get
@@ -43,7 +93,8 @@ namespace VirtualCockpit
                 if (position != pos)
                 {
                     position = pos;
-                    OnChanged(EventArgs.Empty);
+                    Message msg = new Message(null, Name, "INT", position.ToString());
+                    OnChanged(new MessageReadyEventArgs(msg));
                 }
             }
 
@@ -57,27 +108,20 @@ namespace VirtualCockpit
 
 			}
 
-            public event EventHandler Changed;
+            public event MessageReadyEventHandler Changed;
 
-            protected virtual void OnChanged(EventArgs e)
+            protected virtual void OnChanged(MessageReadyEventArgs e)
             {
-                EventHandler handler = Changed;
-                if (handler != null)
+                if (Changed != null)
                 {
-                    handler(this, e);
+                    Changed(this, e);
                 }
             }
 
-            public DiscreteInput()
-            {
-                name = "UnnamedInput";
-                position = 0;
-            }
-
-            public DiscreteInput(string n, int p = 0)
+            public DiscreteInput(string n, int pos = 0)
             {
                 name = n;
-                position = p;
+                position = pos;
             }
         }
 
@@ -93,19 +137,12 @@ namespace VirtualCockpit
                 }
             }
 
-            public MultiPositionSwitch(int positions)
-                : base()
-            {
-                maxPosition = positions - 1;
-            }
-
-            public MultiPositionSwitch(string n, int p, int positions)
-                : base(n, p)
+            public MultiPositionSwitch(string n, int pos, int positions)
+                : base(n, pos)
             {
                 maxPosition = positions - 1;
             }
         }
-
     }
 
 
@@ -116,35 +153,42 @@ namespace VirtualCockpit
 		{
 			public string name;
 			public Dictionary<string, Controllable.MultiPositionSwitch> multiPositionSwitches;
+
+            // used to send an event when the state is updated
+            public event EventHandler<MessageReadyEventArgs> StateUpdated;
+
+            protected virtual void OnStateUpdated(MessageReadyEventArgs e)
+            {
+                EventHandler<MessageReadyEventArgs> handler = StateUpdated;
+                if(handler != null)
+                {
+                    handler(this, e);
+                }
+            }
+
 			public Panel(string n)
 			{
+                multiPositionSwitches = new Dictionary<string, Controllable.MultiPositionSwitch>();
 				name = n;
 			}
+
+            public Panel(string n, Controllable.MultiPositionSwitch[] switches)
+            {
+                multiPositionSwitches = new Dictionary<string, Controllable.MultiPositionSwitch>();
+                name = n;
+                foreach(var s in switches)
+                {
+                    multiPositionSwitches.Add(s.Name, s);
+                    s.Changed += HandleChildMessage;
+                }
+            }
+
+            public virtual void HandleChildMessage(object sender, MessageReadyEventArgs e)
+            {
+                e.message.controlGroup = name;
+                OnStateUpdated(e);
+            }
 		}
-
-
-		#region AAP
-		public class AAP
-        {
-            // CDU Power
-            public Controllable.MultiPositionSwitch CDUPWR = new Controllable.MultiPositionSwitch("AAP_CDUPWR", 0, 2);
-
-            // EGI Power
-            public Controllable.MultiPositionSwitch EGIPWR = new Controllable.MultiPositionSwitch("AAP_EGIPWR", 0, 2);
-
-            // PAGE OTHER - POSITION - STEER - WAYPT
-            public Controllable.MultiPositionSwitch PAGE = new Controllable.MultiPositionSwitch("AAP_PAGE", 0, 4);
-
-            // Toggle Steerpoint
-            public Controllable.MultiPositionSwitch STEER = new Controllable.MultiPositionSwitch("AAP_STEER", 0, 3);
-
-            // STEERPT FLTPLAN - MARK - MISSION
-            public Controllable.MultiPositionSwitch STEERPT = new Controllable.MultiPositionSwitch("AAP_STEERPT", 0, 3);
-		}
-		#endregion
-
 	#endregion
-
-
 	}
 }

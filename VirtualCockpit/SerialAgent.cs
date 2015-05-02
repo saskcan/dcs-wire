@@ -60,7 +60,7 @@ namespace DCSWire
 			}
 		}
 
-		private void SendMessage(Message msg)
+		public void SendMessage(Message msg)
 		{
 			SerialMessage smsg = new SerialMessage(msg);
             int length = Array.IndexOf(smsg.raw, (char)13) + 1;

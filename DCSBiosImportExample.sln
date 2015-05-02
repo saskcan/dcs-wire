@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualCockpit", "VirtualCockpit\VirtualCockpit.csproj", "{0BC475C8-1536-4B31-848E-B5C225F09074}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UdpListener", "UdpListener\UdpListener.csproj", "{BC59BFF0-C8B2-4563-B9DF-3BA00A42C635}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C1ADCB4E-AD19-4F40-B9B1-957D95BB21E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCSWireUtils", "DCSWireMessage\DCSWireUtils.csproj", "{FCB9CF9A-B36B-4184-84F9-56382EC59653}"
@@ -21,10 +19,6 @@ Global
 		{0BC475C8-1536-4B31-848E-B5C225F09074}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BC475C8-1536-4B31-848E-B5C225F09074}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BC475C8-1536-4B31-848E-B5C225F09074}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BC59BFF0-C8B2-4563-B9DF-3BA00A42C635}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC59BFF0-C8B2-4563-B9DF-3BA00A42C635}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BC59BFF0-C8B2-4563-B9DF-3BA00A42C635}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BC59BFF0-C8B2-4563-B9DF-3BA00A42C635}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FCB9CF9A-B36B-4184-84F9-56382EC59653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FCB9CF9A-B36B-4184-84F9-56382EC59653}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCB9CF9A-B36B-4184-84F9-56382EC59653}.Release|Any CPU.ActiveCfg = Release|Any CPU

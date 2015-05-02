@@ -55,9 +55,9 @@
             this.AAP_CDUPWRlabel.AutoSize = true;
             this.AAP_CDUPWRlabel.Location = new System.Drawing.Point(94, 18);
             this.AAP_CDUPWRlabel.Name = "AAP_CDUPWRlabel";
-            this.AAP_CDUPWRlabel.Size = new System.Drawing.Size(35, 13);
+            this.AAP_CDUPWRlabel.Size = new System.Drawing.Size(13, 13);
             this.AAP_CDUPWRlabel.TabIndex = 1;
-            this.AAP_CDUPWRlabel.Text = "label1";
+            this.AAP_CDUPWRlabel.Text = "0";
             // 
             // button2
             // 
@@ -74,18 +74,18 @@
             this.AAP_EGIPWRlabel.AutoSize = true;
             this.AAP_EGIPWRlabel.Location = new System.Drawing.Point(94, 47);
             this.AAP_EGIPWRlabel.Name = "AAP_EGIPWRlabel";
-            this.AAP_EGIPWRlabel.Size = new System.Drawing.Size(35, 13);
+            this.AAP_EGIPWRlabel.Size = new System.Drawing.Size(13, 13);
             this.AAP_EGIPWRlabel.TabIndex = 3;
-            this.AAP_EGIPWRlabel.Text = "label2";
+            this.AAP_EGIPWRlabel.Text = "0";
             // 
             // AAP_PAGElabel
             // 
             this.AAP_PAGElabel.AutoSize = true;
             this.AAP_PAGElabel.Location = new System.Drawing.Point(94, 76);
             this.AAP_PAGElabel.Name = "AAP_PAGElabel";
-            this.AAP_PAGElabel.Size = new System.Drawing.Size(35, 13);
+            this.AAP_PAGElabel.Size = new System.Drawing.Size(13, 13);
             this.AAP_PAGElabel.TabIndex = 5;
-            this.AAP_PAGElabel.Text = "label3";
+            this.AAP_PAGElabel.Text = "0";
             // 
             // button3
             // 
@@ -102,9 +102,9 @@
             this.AAP_STEERlabel.AutoSize = true;
             this.AAP_STEERlabel.Location = new System.Drawing.Point(94, 105);
             this.AAP_STEERlabel.Name = "AAP_STEERlabel";
-            this.AAP_STEERlabel.Size = new System.Drawing.Size(35, 13);
+            this.AAP_STEERlabel.Size = new System.Drawing.Size(13, 13);
             this.AAP_STEERlabel.TabIndex = 7;
-            this.AAP_STEERlabel.Text = "label4";
+            this.AAP_STEERlabel.Text = "0";
             // 
             // button4
             // 
@@ -121,9 +121,9 @@
             this.AAP_STEERPTlabel.AutoSize = true;
             this.AAP_STEERPTlabel.Location = new System.Drawing.Point(94, 134);
             this.AAP_STEERPTlabel.Name = "AAP_STEERPTlabel";
-            this.AAP_STEERPTlabel.Size = new System.Drawing.Size(35, 13);
+            this.AAP_STEERPTlabel.Size = new System.Drawing.Size(13, 13);
             this.AAP_STEERPTlabel.TabIndex = 9;
-            this.AAP_STEERPTlabel.Text = "label5";
+            this.AAP_STEERPTlabel.Text = "0";
             // 
             // button5
             // 

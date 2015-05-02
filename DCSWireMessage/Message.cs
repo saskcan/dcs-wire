@@ -25,6 +25,14 @@ namespace DCSWireUtils
 		}
 
 		public Message() { }
+
+        public Message(string cg, string c, string t, string v = null)
+        {
+            controlGroup = cg;
+            control = c;
+            type = t;
+            value = v;
+        }
 	}
 
 	/// <summary>
