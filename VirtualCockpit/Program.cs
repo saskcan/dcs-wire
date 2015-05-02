@@ -16,10 +16,10 @@ namespace VirtualCockpit
 {
     static class Program
     {
-        static DCSWireUtils.Message msg = new DCSWireUtils.Message();
 		static public Cockpit cockpit;
-        static public SerialAgent serialAgent = new SerialAgent("COM3", 9600);
+        static public SerialAgent serialAgent;
         static public Form1 ui;
+        static public DCSBIOSAgent dcsBiosAgent;
 
         /// <summary>
         /// The main entry point for the application.
@@ -36,11 +36,12 @@ namespace VirtualCockpit
 
 			// create a new SerialAgent to send and receive serial data
             //serialAgent = new SerialAgent("COM3", 9600);
+            serialAgent = new SerialAgent("COM3", 9600);
 			serialAgent.MessageReady += ReceiveMessage;
 			serialAgent.port.Open();
 
             // create a new DCSBIOSAgent and run it on its own thread
-            DCSBIOSAgent dcsBiosAgent = new DCSBIOSAgent(IPAddress.Parse("239.255.50.10"), 5010, new byte[] {0x55, 0x55, 0x55, 0x55}, 65536);
+            dcsBiosAgent = new DCSBIOSAgent(IPAddress.Parse("239.255.50.10"), 5010, new byte[] {0x55, 0x55, 0x55, 0x55}, 65536);
             dcsBiosAgent.StateUpdated += ReceiveMessage;
             Thread DCSBIOSThread = new Thread(dcsBiosAgent.StartAgent);
             DCSBIOSThread.Start();
@@ -62,25 +63,8 @@ namespace VirtualCockpit
         // messages created when the internal state is updated
         static public void SendMEssage(object sender, MessageReadyEventArgs e)
         {
-            SendUDP(e.message);
+            dcsBiosAgent.SendMessage(e.message);
             serialAgent.SendMessage(e.message);
-        }
-
-        static public void SendUDP(DCSWireUtils.Message msg)
-        {
-            UdpClient client = new UdpClient();
-            client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            try
-            {
-                client.Connect("localhost", 7778);
-                Byte[] data = Encoding.ASCII.GetBytes(msg.controlGroup + "_" + msg.control + " " + msg.value + "\n");
-                client.Send(data, data.Length);
-                client.Close();
-            }
-            catch (Exception ex)
-            {
-
-            }
         }
     }
 }

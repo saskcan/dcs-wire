@@ -2,6 +2,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 namespace DCSWire 
 {
@@ -197,6 +198,22 @@ namespace DCSWire
             }
         }
 
+        public void SendMessage(DCSWireUtils.Message msg)
+        {
+            UdpClient client = new UdpClient();
+            client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            try
+            {
+                client.Connect("localhost", 7778);
+                Byte[] data = Encoding.ASCII.GetBytes(msg.controlGroup + "_" + msg.control + " " + msg.value + "\n");
+                client.Send(data, data.Length);
+                client.Close();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
         /// <summary>
         /// Closes the listener
         /// </summary>
