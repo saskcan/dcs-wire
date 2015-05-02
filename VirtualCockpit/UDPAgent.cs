@@ -112,117 +112,108 @@ namespace DCSWire
             UInt16 partial = (UInt16)((state[address + 1] << 8) + state[address]);
 			string controlGroup;
             Message msg;
-            #region AAP
-            if (address == 0x10fa)
+            switch (address)
             {
-				controlGroup = "AAP";
+                #region AAP
+                case 0x10fa:
+                    controlGroup = "AAP";
 
-                // CDU Power
-				msg = new Message(controlGroup, "CDUPWR", "INT");
-				msg.value = (decode(partial, 0x4000, 14).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // CDU Power
+                    msg = new Message(controlGroup, "CDUPWR", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
 
-                // EGI Power
-				msg = new Message(controlGroup, "EGIPWR", "INT");
-				msg.value = (decode(partial, 0x8000, 15).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // EGI Power
+                    msg = new Message(controlGroup, "EGIPWR", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
 
-                //PAGE OTHER - POSITION - STEER - WAYPT
-				msg = new Message(controlGroup, "PAGE", "INT");
-				msg.value = (decode(partial, 0x3000, 12).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
+                    //PAGE OTHER - POSITION - STEER - WAYPT
+                    msg = new Message(controlGroup, "PAGE", "INT");
+                    msg.value = (decode(partial, 0x3000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
 
-                // Toggle Steerpoint
-				msg = new Message(controlGroup, "STEER", "INT");
-				msg.value = (decode(partial, 0x0c00, 10).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Toggle Steerpoint
+                    msg = new Message(controlGroup, "STEER", "INT");
+                    msg.value = (decode(partial, 0x0c00, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
 
-                // STEERPT FLTPLAN - MARK - MISSION
-				msg = new Message(controlGroup, "STEERPT", "INT");
-				msg.value = (decode(partial, 0x0300, 8).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
-            }
+                    // STEERPT FLTPLAN - MARK - MISSION
+                    msg = new Message(controlGroup, "STEERPT", "INT");
+                    msg.value = (decode(partial, 0x0300, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region ADI
+                // ADI Attitude Warning Flag
+                case 0x103a:
+                    msg = new Message("ADI", "ATTWARNFLAG", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                // ADI Bank
+                case 0x1034:
+                    msg = new Message("ADI", "BANK", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                // ADI Course Warning Flag
+                case 0x103c:
+                    msg = new Message("ADI", "CRSWARNFLAG", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                // ADI Glide Slope Indicator
+                case 0x1044:
+                    msg = new Message("ADI", "GS", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                // ADI Glide Slope Warning Flag
+                case 0x103e:
+                    msg = new Message("ADI", "GSWARNFLAG", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                // ADI Pitch
+                case 0x1032:
+                    msg = new Message("ADI", "PITCH", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                // ADI Pitch Trim
+                case 0x115e:
+                    msg = new Message("ADI", "PITCH_TRIM", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                // ADI Slipball Position
+                case 0x1036:
+                    msg = new Message("ADI", "SLIP", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                // ADI Bank Steering Bar
+                case 0x1040:
+                    msg = new Message("ADI", "STEERBANK", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                // ADI Pitch Steering Bar
+                case 0x1042:
+                    msg = new Message("ADI", "STEERPITCH", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                // ADI Turn Needle
+                case 0x1038:
+                    msg = new Message("ADI", "TURN", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
             #endregion
+            }
 
-            #region ADI
-            // ADI Attitude Warning Flag
-            if (address == 0x103a)
-            {
-				msg = new Message("ADI", "ATTWARNFLAG", "INT");
-				msg.value = (decode(partial, 0xffff, 0).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
-            }
-            // ADI Bank
-            if (address == 0x1034)
-            {
-				msg = new Message("ADI", "BANK", "INT");
-				msg.value = (decode(partial, 0xffff, 0).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
-            }
-            // ADI Course Warning Flag
-            if (address == 0x103c)
-            {
-				msg = new Message("ADI", "CRSWARNFLAG", "INT");
-				msg.value = (decode(partial, 0xffff, 0).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
-            }
-            // ADI Glide Slope Indicator
-            if (address == 0x1044)
-            {
-				msg = new Message("ADI", "GS", "INT");
-				msg.value = (decode(partial, 0xffff, 0).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
-            }
-            // ADI Glide Slope Warning Flag
-            if (address == 0x103e)
-            {
-				msg = new Message("ADI", "GSWARNFLAG", "INT");
-				msg.value = (decode(partial, 0xffff, 0).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
-            }
-            // ADI Pitch
-            if (address == 0x1032)
-            {
-				msg = new Message("ADI", "PITCH", "INT");
-				msg.value = (decode(partial, 0xffff, 0).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
-            }
-            // ADI Pitch Trim
-            if (address == 0x115e)
-            {
-				msg = new Message("ADI", "PITCH_TRIM", "INT");
-				msg.value = (decode(partial, 0xffff, 0).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
-            }
-            // ADI Slipball Position
-            if (address == 0x1036)
-            {
-				msg = new Message("ADI", "SLIP", "INT");
-				msg.value = (decode(partial, 0xffff, 0).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
-            }
-            // ADI Bank Steering Bar
-            if (address == 0x1040)
-            {
-				msg = new Message("ADI", "STEERBANK", "INT");
-				msg.value = (decode(partial, 0xffff, 0).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
-            }
-            // ADI Pitch Steering Bar
-            if (address == 0x1042)
-            {
-				msg = new Message("ADI", "STEERPITCH", "INT");
-				msg.value = (decode(partial, 0xffff, 0).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
-            }
-            // ADI Turn Needle
-            if (address == 0x1038)
-            {
-				msg = new Message("ADI", "TURN", "INT");
-				msg.value = (decode(partial, 0xffff, 0).ToString()); 
-				OnStateUpdated(new MessageReadyEventArgs(msg));
-            }
-            #endregion
         }
 
         public UInt16 decode(UInt16 partial, UInt16 mask, int shift)
