@@ -16,6 +16,14 @@ namespace DCSWireUtils
         public string type;
         public string value;
 
+        public string Descriptor
+        {
+            get
+            {
+                return controlGroup + "_" + control;
+            }
+        }
+
 		public Message(dynamic x)
 		{
 			controlGroup = x.controlGroup;
