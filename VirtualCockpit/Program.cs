@@ -16,7 +16,7 @@ namespace VirtualCockpit
 {
     static class Program
     {
-		static public Cockpit cockpit;
+		static public Cockpit.Cockpit cockpit;
         static public SerialAgent serialAgent;
         static public Form1 ui;
         static public DCSBIOSAgent dcsBiosAgent;
@@ -28,7 +28,7 @@ namespace VirtualCockpit
         static void Main()
         {
 			// initialize the cockpit
-            cockpit = new Cockpit();
+            cockpit = new Cockpit.Cockpit();
             cockpit.StateUpdated += SendMEssage;
 
             Application.EnableVisualStyles();
