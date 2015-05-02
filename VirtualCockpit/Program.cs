@@ -38,7 +38,7 @@ namespace VirtualCockpit
             //serialAgent = new SerialAgent("COM3", 9600);
             serialAgent = new SerialAgent("COM3", 9600);
 			serialAgent.MessageReady += ReceiveMessage;
-			serialAgent.port.Open();
+            serialAgent.Begin();
 
             // create a new DCSBIOSAgent and run it on its own thread
             dcsBiosAgent = new DCSBIOSAgent(IPAddress.Parse("239.255.50.10"), 5010, new byte[] {0x55, 0x55, 0x55, 0x55}, 65536);

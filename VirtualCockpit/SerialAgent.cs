@@ -62,15 +62,37 @@ namespace DCSWire
 
 		public void SendMessage(Message msg)
 		{
-			SerialMessage smsg = new SerialMessage(msg);
-            int length = Array.IndexOf(smsg.raw, (char)13) + 1;
-            port.Write(smsg.raw, 0, length);
+            if(port != null)
+            {
+                SerialMessage smsg = new SerialMessage(msg);
+                int length = Array.IndexOf(smsg.raw, (char)13) + 1;
+                port.Write(smsg.raw, 0, length);
+            }
 		}
 
 		public SerialAgent(string portName, int baudRate)
 		{
-			port = new SerialPort(portName, baudRate);
-			port.DataReceived += DataReceivedHandler;
+            // check to see if the specified port is available
+            bool portAvailable = false;
+            string[] ports = SerialPort.GetPortNames();
+            foreach(var p in ports)
+            {
+                if (p == portName)
+                {
+                    portAvailable = true;
+                    port = new SerialPort(portName, baudRate);
+                    port.DataReceived += DataReceivedHandler;
+                    break;
+                }
+            }
 		}
+
+        public void Begin()
+        {
+            if(port != null)
+            {
+                port.Open();
+            }
+        }
     }
 }
