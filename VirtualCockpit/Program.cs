@@ -57,7 +57,16 @@ namespace VirtualCockpit
         // messages arriving through Serial Port, the Virtual Cockpit and From UDP
 		static public void ReceiveMessage(object sender, MessageReadyEventArgs e)
 		{
-			cockpit.panels[e.message.controlGroup].multiPositionSwitches[e.message.control].SetState(e.message.value);
+            // get the message value type
+            string type = e.message.type;
+            if(type == "INT")
+            {
+                cockpit.panels[e.message.controlGroup].numericInterfaceables[e.message.control].SetValue(e.message.value);
+            }
+            else if(type == "STR")
+            {
+                cockpit.panels[e.message.controlGroup].textInterfaceables[e.message.control].Value = e.message.value;
+            }
 		}
 
         // messages created when the internal state is updated

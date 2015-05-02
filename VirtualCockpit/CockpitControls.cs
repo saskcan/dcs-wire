@@ -36,39 +36,39 @@ namespace Cockpit
             panels = new Dictionary<string, Panel>()
             {
                 {
-                    "AAP", new Panel("AAP", new MultiPositionSwitch[] {
-                        new MultiPositionSwitch("CDUPWR", 0, 2),
-                        new MultiPositionSwitch("EGIPWR", 0, 2),
-                        new MultiPositionSwitch("PAGE", 0, 4),
-                        new MultiPositionSwitch("STEER", 0, 3),
-                        new MultiPositionSwitch("STEERPT", 0, 3)})
+                    "AAP", new Panel("AAP", new NumericInterfaceable[] {
+                        new NumericInterfaceable("CDUPWR", 0, 1),
+                        new NumericInterfaceable("EGIPWR", 0, 1),
+                        new NumericInterfaceable("PAGE", 0, 3),
+                        new NumericInterfaceable("STEER", 0, 2),
+                        new NumericInterfaceable("STEERPT", 0, 2)})
                 },
                 {
-                    "ADI", new Panel("ADI", new MultiPositionSwitch[] {
-                        new MultiPositionSwitch("ATTWARNFLAG", 0, 65535),
-                        new MultiPositionSwitch("BANK", 0, 65535),
-                        new MultiPositionSwitch("CRSWARNFLAG", 0, 65535),
-                        new MultiPositionSwitch("GS", 0, 65535),
-                        new MultiPositionSwitch("GSWARNFLAG", 0, 65535),
-                        new MultiPositionSwitch("PITCH", 0, 65535),
-                        new MultiPositionSwitch("PITCH_TRIM", 0, 65535),
-                        new MultiPositionSwitch("SLIP", 0, 65535),
-                        new MultiPositionSwitch("STEERBANK", 0, 65535),
-                        new MultiPositionSwitch("STEERPITCH", 0, 65535),
-                        new MultiPositionSwitch("TURN", 0, 65535)})
+                    "ADI", new Panel("ADI", new NumericInterfaceable[] {
+                        new NumericInterfaceable("ATTWARNFLAG", 0, 65535),
+                        new NumericInterfaceable("BANK", 0, 65535),
+                        new NumericInterfaceable("CRSWARNFLAG", 0, 65535),
+                        new NumericInterfaceable("GS", 0, 65535),
+                        new NumericInterfaceable("GSWARNFLAG", 0, 65535),
+                        new NumericInterfaceable("PITCH", 0, 65535),
+                        new NumericInterfaceable("PITCH_TRIM", 0, 65535),
+                        new NumericInterfaceable("SLIP", 0, 65535),
+                        new NumericInterfaceable("STEERBANK", 0, 65535),
+                        new NumericInterfaceable("STEERPITCH", 0, 65535),
+                        new NumericInterfaceable("TURN", 0, 65535)})
                 },
                 {
-                    "AHCP", new Panel("AHCP", new MultiPositionSwitch[] {
-                        new MultiPositionSwitch("AHCP_ALT_SCE", 0, 3),
-                        new MultiPositionSwitch("AHCP_CICU", 0, 2),
-                        new MultiPositionSwitch("AHCP_GUNPAC", 0, 3),
-                        new MultiPositionSwitch("AHCP_HUD_DAYNIGHT", 0, 2),
-                        new MultiPositionSwitch("AHCP_H33UD_MODE", 0, 2),
-                        new MultiPositionSwitch("AHCP_IFFCC", 0, 3),
-                        new MultiPositionSwitch("AHCP_JTRS", 0, 2),
-                        new MultiPositionSwitch("AHCP_LASER_ARM", 0, 3),
-                        new MultiPositionSwitch("AHCP_MASTER_ARM", 0, 3),
-                        new MultiPositionSwitch("AHCP_TGP", 0, 2)})
+                    "AHCP", new Panel("AHCP", new NumericInterfaceable[] {
+                        new NumericInterfaceable("AHCP_ALT_SCE", 0, 2),
+                        new NumericInterfaceable("AHCP_CICU", 0, 1),
+                        new NumericInterfaceable("AHCP_GUNPAC", 0, 2),
+                        new NumericInterfaceable("AHCP_HUD_DAYNIGHT", 0, 1),
+                        new NumericInterfaceable("AHCP_H33UD_MODE", 0, 1),
+                        new NumericInterfaceable("AHCP_IFFCC", 0, 2),
+                        new NumericInterfaceable("AHCP_JTRS", 0, 1),
+                        new NumericInterfaceable("AHCP_LASER_ARM", 0, 2),
+                        new NumericInterfaceable("AHCP_MASTER_ARM", 0, 2),
+                        new NumericInterfaceable("AHCP_TGP", 0, 1)})
                 }
             };
 
@@ -79,45 +79,16 @@ namespace Cockpit
 		}
 	}
 
-    public class DiscreteInput
+    public class Interfaceable
     {
         private string name;
-        private int position;
-        
+
         public string Name
         {
             get
             {
                 return name;
             }
-        }
-        
-        public int Position
-        {
-            get
-            {
-                return position;
-            }
-        }
-
-        public void SetState (int pos)
-        {
-            if (position != pos)
-            {
-                position = pos;
-                Message msg = new Message(null, Name, "INT", position.ToString());
-                OnChanged(new MessageReadyEventArgs(msg));
-            }
-        }
-
-        public void SetState(string pos)
-        {
-            int position;
-            if(int.TryParse(pos, out position))
-            {
-                SetState(position);
-            }
-
         }
 
         public event MessageReadyEventHandler Changed;
@@ -130,36 +101,106 @@ namespace Cockpit
             }
         }
 
-        public DiscreteInput(string n, int pos = 0)
+        public Interfaceable(string n)
         {
             name = n;
-            position = pos;
         }
     }
 
-    public class MultiPositionSwitch : DiscreteInput
+    public class NumericInterfaceable : Interfaceable
     {
-        private int maxPosition;
+        private int _value;
 
-        public int MaxPosition
+        public int Value 
         {
             get
             {
-                return maxPosition;
+                return _value;
+            }
+
+            set
+            {
+                if (_value != value)
+                {
+                    _value = value;
+                    Message msg = new Message(null, Name, "INT", _value.ToString());
+                    OnChanged(new MessageReadyEventArgs(msg));
+                }
+
+            }
+             
+        }
+
+        private int _maxValue;
+
+        public int MaxValue
+        {
+            get
+            {
+                return _maxValue;
             }
         }
 
-        public MultiPositionSwitch(string n, int pos, int positions)
-            : base(n, pos)
+        public NumericInterfaceable(string n, int v, int m) : base(n)
         {
-            maxPosition = positions - 1;
+            _value = v;
+            _maxValue = m;
+        }
+
+        public void SetValue(string v)
+        {
+            int value;
+            if(int.TryParse(v, out value))
+            {
+                Value = value;
+            }
+        }
+    }
+
+    public class TextInterfaceable : Interfaceable
+    {
+        private string _value;
+
+        public string Value 
+        {
+            get
+            {
+                return _value;
+            }
+
+            set
+            {
+                if (_value != value)
+                {
+                    _value = value;
+                    Message msg = new Message(null, Name, "STR", _value);
+                    OnChanged(new MessageReadyEventArgs(msg));
+                }
+
+            }
+             
+        }
+
+        public TextInterfaceable(string n, string v) : base(n)
+        {
+            _value = v;
         }
     }
 
     public class Panel
     {
-        public string name;
-        public Dictionary<string, MultiPositionSwitch> multiPositionSwitches;
+        private string _name;
+
+        public string Name
+        { 
+            get
+            {
+                return _name;
+            }
+         }
+
+        public Dictionary<string, NumericInterfaceable> numericInterfaceables;
+        public Dictionary<string, TextInterfaceable> textInterfaceables;
 
         // used to send an event when the state is updated
         public event EventHandler<MessageReadyEventArgs> StateUpdated;
@@ -173,26 +214,34 @@ namespace Cockpit
             }
         }
 
-        public Panel(string n)
+        public Panel(string n, NumericInterfaceable[] numeric = null, TextInterfaceable[] text = null)
         {
-            multiPositionSwitches = new Dictionary<string, MultiPositionSwitch>();
-            name = n;
-        }
+            numericInterfaceables = new Dictionary<string, NumericInterfaceable>();
+            textInterfaceables = new Dictionary<string, TextInterfaceable>();
+            _name = n;
 
-        public Panel(string n, MultiPositionSwitch[] switches)
-        {
-            multiPositionSwitches = new Dictionary<string, MultiPositionSwitch>();
-            name = n;
-            foreach(var s in switches)
+            if (numeric != null)
             {
-                multiPositionSwitches.Add(s.Name, s);
-                s.Changed += HandleChildMessage;
+                foreach (var nu in numeric)
+                {
+                    numericInterfaceables.Add(nu.Name, nu);
+                    nu.Changed += HandleChildMessage;
+                }
+            }
+
+            if (text != null)
+            {
+                foreach (var t in text)
+                {
+                    textInterfaceables.Add(t.Name, t);
+                    t.Changed += HandleChildMessage;
+                }
             }
         }
 
         public virtual void HandleChildMessage(object sender, MessageReadyEventArgs e)
         {
-            e.message.controlGroup = name;
+            e.message.controlGroup = _name;
             OnStateUpdated(e);
         }
 	}
