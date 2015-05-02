@@ -101,78 +101,60 @@ namespace VirtualCockpit
 
         private void ValueChanged(object sender, MessageReadyEventArgs e)
         {
-            // AAP
-            if (e.message.controlGroup == "AAP")
+            switch (e.message.Descriptor)
             {
-                // CDUPWR
-                if(e.message.control == "CDUPWR")
-                {
+                #region AAP
+                case "AAP_CDUPWR":
                     SetText(e.message.value, this.AAP_CDUPWRlabel);
-                }
-                else if(e.message.control == "EGIPWR")
-                {
+                    break;
+                case "AAP_EGIPWR":
                     SetText(e.message.value, this.AAP_EGIPWRlabel);
-                }
-                else if(e.message.control == "PAGE")
-                {
+                    break;
+                case "AAP_PAGE":
                     SetText(e.message.value, this.AAP_PAGElabel);
-                }
-                else if(e.message.control == "STEER")
-                {
+                    break;
+                case "AAP_STEER":
                     SetText(e.message.value, this.AAP_STEERlabel);
-                }
-                else if(e.message.control == "STEERPT")
-                {
+                    break;
+                case "AAP_STEERPT":
                     SetText(e.message.value, this.AAP_STEERPTlabel);
-                }
-            }
-            // ADI
-            if (e.message.controlGroup == "ADI")
-            {
-                if(e.message.control == "ATTWARNFLAG")
-                {
+                    break;
+                #endregion
+                #region ADI
+                case "ADI_ATTWARNFLAG":
                     SetText(e.message.value, this.ADI_ATTWARNFLAGlabel);
-                }
-                if(e.message.control == "BANK")
-                {
+                    break;
+                case "ADI_BANK":
                     SetText(e.message.value, this.ADI_BANKlabel);
-                }
-                if(e.message.control == "CRSWARNFLAG")
-                {
+                    break;
+                case "ADI_CRSWARNFLAG":
                     SetText(e.message.value, this.ADI_CRSWARNFLAGlabel);
-                }
-                if(e.message.control == "GS")
-                {
+                    break;
+                case "ADI_GS":
                     SetText(e.message.value, this.ADI_GSlabel);
-                }
-                if(e.message.control == "GSWARNFLAG")
-                {
+                    break;
+                case "ADI_GSWARNFLAG":
                     SetText(e.message.value, this.ADI_GSWARNFLAGlabel);
-                }
-                if(e.message.control == "PITCH")
-                {
+                    break;
+                case "ADI_PITCH":
                     SetText(e.message.value, this.ADI_PITCHlabel);
-                }
-                if(e.message.control == "PITCH_TRIM")
-                {
+                    break;
+                case "ADI_PITCH_TRIM":
                     SetText(e.message.value, this.ADI_PITCH_TRIMlabel);
-                }
-                if(e.message.control == "SLIP")
-                {
+                    break;
+                case "ADI_SLIP":
                     SetText(e.message.value, this.ADI_SLIPlabel);
-                }
-                if(e.message.control == "STEERBANK")
-                {
+                    break;
+                case "ADI_STEERBANK":
                     SetText(e.message.value, this.ADI_STEERBANKlabel);
-                }
-                if(e.message.control == "STEERPITCH")
-                {
+                    break;
+                case "ADI_STEERPITCH":
                     SetText(e.message.value, this.ADI_STEERPITCHlabel);
-                }
-                if(e.message.control == "TURN")
-                {
+                    break;
+                case "ADI_TURN":
                     SetText(e.message.value, this.ADI_TURNlabel);
-                }
+                    break;
+                #endregion
             }
         }
 
