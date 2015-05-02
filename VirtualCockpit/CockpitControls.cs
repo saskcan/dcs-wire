@@ -59,16 +59,16 @@ namespace Cockpit
                 },
                 {
                     "AHCP", new Panel("AHCP", new NumericInterfaceable[] {
-                        new NumericInterfaceable("AHCP_ALT_SCE", 0, 2),
-                        new NumericInterfaceable("AHCP_CICU", 0, 1),
-                        new NumericInterfaceable("AHCP_GUNPAC", 0, 2),
-                        new NumericInterfaceable("AHCP_HUD_DAYNIGHT", 0, 1),
-                        new NumericInterfaceable("AHCP_H33UD_MODE", 0, 1),
-                        new NumericInterfaceable("AHCP_IFFCC", 0, 2),
-                        new NumericInterfaceable("AHCP_JTRS", 0, 1),
-                        new NumericInterfaceable("AHCP_LASER_ARM", 0, 2),
-                        new NumericInterfaceable("AHCP_MASTER_ARM", 0, 2),
-                        new NumericInterfaceable("AHCP_TGP", 0, 1)})
+                        new NumericInterfaceable("ALT_SCE", 0, 2),
+                        new NumericInterfaceable("CICU", 0, 1),
+                        new NumericInterfaceable("GUNPAC", 0, 2),
+                        new NumericInterfaceable("HUD_DAYNIGHT", 0, 1),
+                        new NumericInterfaceable("HUD_MODE", 0, 1),
+                        new NumericInterfaceable("IFFCC", 0, 2),
+                        new NumericInterfaceable("JTRS", 0, 1),
+                        new NumericInterfaceable("LASER_ARM", 0, 2),
+                        new NumericInterfaceable("MASTER_ARM", 0, 2),
+                        new NumericInterfaceable("TGP", 0, 1)})
                 }
             };
 
