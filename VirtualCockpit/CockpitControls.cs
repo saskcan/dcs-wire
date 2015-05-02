@@ -44,6 +44,20 @@ namespace Cockpit
                         new MultiPositionSwitch("STEERPT", 0, 3)})
                 },
                 {
+                    "ADI", new Panel("ADI", new MultiPositionSwitch[] {
+                        new MultiPositionSwitch("ATTWARNFLAG", 0, 65535),
+                        new MultiPositionSwitch("BANK", 0, 65535),
+                        new MultiPositionSwitch("CRSWARNFLAG", 0, 65535),
+                        new MultiPositionSwitch("GS", 0, 65535),
+                        new MultiPositionSwitch("GSWARNFLAG", 0, 65535),
+                        new MultiPositionSwitch("PITCH", 0, 65535),
+                        new MultiPositionSwitch("PITCH_TRIM", 0, 65535),
+                        new MultiPositionSwitch("SLIP", 0, 65535),
+                        new MultiPositionSwitch("STEERBANK", 0, 65535),
+                        new MultiPositionSwitch("STEERPITCH", 0, 65535),
+                        new MultiPositionSwitch("TURN", 0, 65535)})
+                },
+                {
                     "AHCP", new Panel("AHCP", new MultiPositionSwitch[] {
                         new MultiPositionSwitch("AHCP_ALT_SCE", 0, 3),
                         new MultiPositionSwitch("AHCP_CICU", 0, 2),

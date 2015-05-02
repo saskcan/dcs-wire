@@ -126,6 +126,54 @@ namespace VirtualCockpit
                     SetText(e.message.value, this.AAP_STEERPTlabel);
                 }
             }
+            // ADI
+            if (e.message.controlGroup == "ADI")
+            {
+                if(e.message.control == "ATTWARNFLAG")
+                {
+                    SetText(e.message.value, this.ADI_ATTWARNFLAGlabel);
+                }
+                if(e.message.control == "BANK")
+                {
+                    SetText(e.message.value, this.ADI_BANKlabel);
+                }
+                if(e.message.control == "CRSWARNFLAG")
+                {
+                    SetText(e.message.value, this.ADI_CRSWARNFLAGlabel);
+                }
+                if(e.message.control == "GS")
+                {
+                    SetText(e.message.value, this.ADI_GSlabel);
+                }
+                if(e.message.control == "GSWARNFLAG")
+                {
+                    SetText(e.message.value, this.ADI_GSWARNFLAGlabel);
+                }
+                if(e.message.control == "PITCH")
+                {
+                    SetText(e.message.value, this.ADI_PITCHlabel);
+                }
+                if(e.message.control == "PITCH_TRIM")
+                {
+                    SetText(e.message.value, this.ADI_PITCH_TRIMlabel);
+                }
+                if(e.message.control == "SLIP")
+                {
+                    SetText(e.message.value, this.ADI_SLIPlabel);
+                }
+                if(e.message.control == "STEERBANK")
+                {
+                    SetText(e.message.value, this.ADI_STEERBANKlabel);
+                }
+                if(e.message.control == "STEERPITCH")
+                {
+                    SetText(e.message.value, this.ADI_STEERPITCHlabel);
+                }
+                if(e.message.control == "TURN")
+                {
+                    SetText(e.message.value, this.ADI_TURNlabel);
+                }
+            }
         }
 
         private void SetText(string text, Label label)
