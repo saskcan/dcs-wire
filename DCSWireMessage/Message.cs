@@ -15,6 +15,7 @@ namespace DCSWireUtils
         public string control;
         public string type;
         public string value;
+        public bool sendControlGroupViaUDP;
 
         public string Descriptor
         {
@@ -34,12 +35,13 @@ namespace DCSWireUtils
 
 		public Message() { }
 
-        public Message(string cg, string c, string t, string v = null)
+        public Message(string cg, string c, string t, string v = null, bool sCVUDP = true)
         {
             controlGroup = cg;
             control = c;
             type = t;
             value = v;
+            sendControlGroupViaUDP = sCVUDP;
         }
 	}
 

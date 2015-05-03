@@ -216,6 +216,16 @@ namespace DCSWire
 
         }
 
+        private Byte[] encode(Message msg)
+        {
+            string toSend = msg.control + " " + msg.value + "\n";
+            if(msg.sendControlGroupViaUDP)
+            {
+                toSend = msg.controlGroup + "_" + toSend;
+            }
+            return Encoding.ASCII.GetBytes(toSend);
+        }
+        
         public UInt16 decode(UInt16 partial, UInt16 mask, int shift)
         {
             return (UInt16)((partial & mask) >> shift);
@@ -271,14 +281,14 @@ namespace DCSWire
             }
         }
 
-        public void SendMessage(DCSWireUtils.Message msg)
+        public void SendMessage(Message msg)
         {
             UdpClient client = new UdpClient();
             client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             try
             {
                 client.Connect("localhost", 7778);
-                Byte[] data = Encoding.ASCII.GetBytes(msg.controlGroup + "_" + msg.control + " " + msg.value + "\n");
+                Byte[] data = encode(msg); 
                 client.Send(data, data.Length);
                 client.Close();
             }
