@@ -202,12 +202,12 @@ namespace Cockpit
                             new NumericInterfaceable("PRI", 0, 1),
                             new NumericInterfaceable("PRIO", 0, 1),
                             new NumericInterfaceable("RWR_VOL", 0, 65535),
-                            new NumericInterfaceable("SEP", 0, 1)},
+                            new NumericInterfaceable("SEP", 0, 1),
+                            new NumericInterfaceable("UNKNVALUE", 0, 1)},
                         new TextInterfaceable[] {
                             new TextInterfaceable("TXTCHAFFFLAREBUFFER", ""),
                             new TextInterfaceable("TXTJMRBUFFER", ""),
-                            new TextInterfaceable("TXTMWSBUFFER", ""),
-                            new TextInterfaceable("UNKN", "")})
+                            new TextInterfaceable("TXTMWSBUFFER", "")})
                 },
                 {
                     "CMSP", new Panel("CMSP", new NumericInterfaceable[] {
@@ -342,7 +342,7 @@ namespace Cockpit
                             new NumericInterfaceable("AC_GEN_PWR_L", 0, 1),
                             new NumericInterfaceable("AC_GEN_PWR_R", 0, 1),
                             new NumericInterfaceable("APU_GEN_PWR", 0, 1),
-                            new NumericInterfaceable("BATTERY_POWER", 0, 1),
+                            new NumericInterfaceable("BATTERY_PWR", 0, 1),
                             new NumericInterfaceable("EMER_FLOOD", 0, 1),
                             new NumericInterfaceable("INVERTER", 0, 2)})
                 },
