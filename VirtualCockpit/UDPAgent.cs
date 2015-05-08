@@ -230,7 +230,7 @@ namespace DCSWire
                     msg.value = (decode(partial, 0xffff, 0).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
-            #endregion
+                #endregion
                 #region AHCP(1), CMSC(1)
                 case 0x10e8:
                     controlGroup = "AHCP";
@@ -480,8 +480,29 @@ namespace DCSWire
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
-                #region Auxiliary Light Control Panel(2)
+                #region Glare Shield
                 case 0x1158:
+                    // APU Fire T-Handle
+                    msg = new Message("GLARE", "FIRE_APU_PULL", "INT");
+                    msg.value = (decode(partial, 0x0004, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Fire Extinguisher Discharge Left/Off/Right
+                    msg = new Message("GLARE", "FIRE_EXT_DISCH", "INT");
+                    msg.value = (decode(partial, 0x0030, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Left Engine Fire T-Handle
+                    msg = new Message("GLARE", "FIRE_LENG_PULL", "INT");
+                    msg.value = (decode(partial, 0x0002, 1).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Right Engine Fire T-Handle
+                    msg = new Message("GLARE", "FIRE_RENG_PULL", "INT");
+                    msg.value = (decode(partial, 0x0008, 3).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Auxiliary Light Control Panel(2)
                     // Fire Detect Bleed Air Test 
                     msg = new Message("ALCP", "FDBA_TEST", "INT");
                     msg.value = (decode(partial, 0x0001, 0).ToString()); 
@@ -512,6 +533,12 @@ namespace DCSWire
                     // Signal Lights Test 
                     msg = new Message("ALCP", "LAMP_TEST_BTN", "INT");
                     msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Glare Shield
+                    // External Stores Jettison Button
+                    msg = new Message("GLARE", "EXT_STORES_JETTISON", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
@@ -827,6 +854,12 @@ namespace DCSWire
                     msg.value = (decode(partial, 0xffff, 0).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
+                case 0x10ec:
+                    // Adjust RWR Volume
+                    msg = new Message("CMSC", "RWR_VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
                 case 0x1012:
                     // Missile Launch Indicator
                     msg = new Message("CMSC", "LAUNCH", "INT");
@@ -842,11 +875,26 @@ namespace DCSWire
                     msg = new Message("CMSC", "UNKNVALUE", "INT");
                     msg.value = (decode(partial, 0x0400, 10).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
-                    break;
-                case 0x10ec:
-                    // Adjust RWR Volume
-                    msg = new Message("CMSC", "RWR_VOL", "INT");
-                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                #endregion
+                #region HUD
+                    // Air Refuel READY
+                    msg = new Message("HUD", "AIRREFUELREADY", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // AOA Indexer High
+                    msg = new Message("HUD", "AOAINDEXERHIGH", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // AOA Indexer Low
+                    msg = new Message("HUD", "AOAINDEXERLOW", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // AOA Indexer Normal
+                    msg = new Message("HUD", "AOAINDEXERNORMAL", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
@@ -1179,8 +1227,34 @@ namespace DCSWire
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
-                #region Circuit Breaker Panel
+                #region Environment Control Panel(1)
                 case 0x1138:
+                    // ENVCP Air Conditioner MAN/AUTO/COLD/HOT
+                    msg = new Message("ENVCP", "AC_OPER", "INT");
+                    msg.value = (decode(partial, 0x0300, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // ENVCP Main Air Supply
+                    msg = new Message("ENVCP", "AIR_SUPPLY", "INT");
+                    msg.value = (decode(partial, 0x0080, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // ENVCP Bleed Air
+                    msg = new Message("ENVCP", "BLEED_AIR", "INT");
+                    msg.value = (decode(partial, 0x0002, 1).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // ENVCP Pitot Heat 
+                    msg = new Message("ENVCP", "PITOT_HEAT", "INT");
+                    msg.value = (decode(partial, 0x0001, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // ENVCP Temperature/Pressure Control
+                    msg = new Message("ENVCP", "TEMP_PRESS", "INT");
+                    msg.value = (decode(partial, 0x000c, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Circuit Breaker Panel
                     // AILERON DISC L Circuit Breaker
                     msg = new Message("CBP", "AILERON_DISC_L", "INT");
                     msg.value = (decode(partial, 0x0400, 10).ToString()); 
@@ -1385,6 +1459,77 @@ namespace DCSWire
                     msg = new Message("CLOCK", "SET", "INT");
                     msg.value = (decode(partial, 0x0001, 0).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Fuel System Control Panel
+                    // Signal Amplifier NORM - OVERRIDE
+                    msg = new Message("FSCP", "AMPL", "INT");
+                    msg.value = (decode(partial, 0x0400, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Boost Pumps Main Fuselage Left
+                    msg = new Message("FSCP", "BOOST_MAIN_L", "INT");
+                    msg.value = (decode(partial, 0x0100, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    
+                    // Boost Pumps Main Fuselage Right 
+                    msg = new Message("FSCP", "BOOST_MAIN_R", "INT");
+                    msg.value = (decode(partial, 0x0200, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Boost Pumps Left Wign
+                    msg = new Message("FSCP", "BOOST_WING_L", "INT");
+                    msg.value = (decode(partial, 0x0040, 6).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Boost Pumps Left Wign
+                    msg = new Message("FSCP", "BOOST_WING_R", "INT");
+                    msg.value = (decode(partial, 0x0080, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Crossfeed
+                    msg = new Message("FSCP", "CROSSFEED", "INT");
+                    msg.value = (decode(partial, 0x0020, 5).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // External Fuselage Tanks Boost Pumps 
+                    msg = new Message("FSCP", "EXT_TANKS_FUS", "INT");
+                    msg.value = (decode(partial, 0x0008, 3).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // External Wing Tanks Boost Pumps 
+                    msg = new Message("FSCP", "EXT_TANKS_WING", "INT");
+                    msg.value = (decode(partial, 0x0004, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Fill Disable Main Left
+                    msg = new Message("FSCP", "FD_MAIN_L", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Fill Disable Main Right 
+                    msg = new Message("FSCP", "FD_MAIN_R", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Fill Disable Wing Left 
+                    msg = new Message("FSCP", "FD_WING_L", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Fill Disable Wing Right 
+                    msg = new Message("FSCP", "FD_WING_R", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    
+                    // Line Check
+                    msg = new Message("FSCP", "LINE_CHECK", "INT");
+                    msg.value = (decode(partial, 0x0800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // TK Gate
+                    msg = new Message("FSCP", "TK_GATE", "INT");
+                    msg.value = (decode(partial, 0x0010, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
                 #region Electrical Power Panel(1)
@@ -1439,8 +1584,8 @@ namespace DCSWire
                     msg = new Message("EFCP", "TRIM_OVERRIDE", "INT");
                     msg.value = (decode(partial, 0x0004, 2).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
-                #endregion
                     break;
+                #endregion
                 #region Electrical Power Panel(2)
                 case 0x1110:
                     // AC GEN PWR Right 
@@ -1478,155 +1623,696 @@ namespace DCSWire
                     msg = new Message("EFCP", "RELEVATOREMERDISENGAGE", "INT");
                     msg.value = (decode(partial, 0x0200, 9).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
-                    break;
                 #endregion
-                #region Strings
-                default:
-                    #region CDU Display
-                    if(0x11c0 <= address && address <= 0x11d7)
-                    {
-                        // CDU Line 1
-                        msg = new Message("CDU", "LINE0BUFFER", "STRING");
-                        msg.value = decodeString(0x11c0, 24);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x11d8 <= address && address <= 0x11ef)
-                    {
-                        // CDU Line 2
-                        msg = new Message("CDU", "LINE1BUFFER", "STRING");
-                        msg.value = decodeString(0x11d8, 24);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x11f0 <= address && address <= 0x1207)
-                    {
-                        // CDU Line 3
-                        msg = new Message("CDU", "LINE2BUFFER", "STRING");
-                        msg.value = decodeString(0x11f0, 24);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x1208 <= address && address <= 0x121f)
-                    {
-                        // CDU Line 4
-                        msg = new Message("CDU", "LINE3BUFFER", "STRING");
-                        msg.value = decodeString(0x1208, 24);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x1220 <= address && address <= 0x1237)
-                    {
-                        // CDU Line 5
-                        msg = new Message("CDU", "LINE4BUFFER", "STRING");
-                        msg.value = decodeString(0x1220, 24);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x1238 <= address && address <= 0x124f)
-                    {
-                        // CDU Line 6
-                        msg = new Message("CDU", "LINE5BUFFER", "STRING");
-                        msg.value = decodeString(0x1238, 24);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x1250 <= address && address <= 0x1267)
-                    {
-                        // CDU Line 7
-                        msg = new Message("CDU", "LINE6BUFFER", "STRING");
-                        msg.value = decodeString(0x1250, 24);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x1268 <= address && address <= 0x127f)
-                    {
-                        // CDU Line 8
-                        msg = new Message("CDU", "LINE7BUFFER", "STRING");
-                        msg.value = decodeString(0x1268, 24);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x1280 <= address && address <= 0x1297)
-                    {
-                        // CDU Line 9
-                        msg = new Message("CDU", "LINE8BUFFER", "STRING");
-                        msg.value = decodeString(0x1280, 24);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x1298 <= address && address <= 0x12af)
-                    {
-                        // CDU Line 10
-                        msg = new Message("CDU", "LINE9BUFFER", "STRING");
-                        msg.value = decodeString(0x1298, 24);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                #endregion
-                    #region CMSC
-                    else if(0x10e8 <= address && address <= 0x10ef)
-                    {
-                        // CMSC Chaff / Flare Amount Display
-                        msg = new Message("CMSC", "TXTCHAFFFLAREBUFFER", "STRING");
-                        msg.value = decodeString(0x10e8, 8);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x1096 <= address && address <= 0x109d )
-                    {
-                        // CMSC JMR Status Display
-                        msg = new Message("CMSC", "TXTJMRBUFFER", "STRING");
-                        msg.value = decodeString(0x1096, 8);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x12b0 <= address && address <= 0x12b7 )
-                    {
-                        // CMSC MWS Status Display
-                        msg = new Message("CMSC", "TXTMWSBUFFER", "STRING");
-                        msg.value = decodeString(0x12b0, 8);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    #endregion
-                    #region CMSP
-                    else if(0x1000 <= address && address <= 0x1012 )
-                    {
-                        // CMSP Display Line 1
-                        msg = new Message("CMSP", "1BUFFER", "STRING");
-                        msg.value = decodeString(0x1000, 19);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x1014 <= address && address <= 0x1026 )
-                    {
-                        // CMSP Display Line 2
-                        msg = new Message("CMSP", "2BUFFER", "STRING");
-                        msg.value = decodeString(0x1014, 19);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    #endregion
-                    #region Digital Clock(2)
-                    else if(0x1104 <= address && address <= 0x1106)
-                    {
-                        // Clock ETC display ('ET', 'C', or three spaces)
-                        msg = new Message("CLOCK", "ETCBUFFER", "STRING");
-                        msg.value = decodeString(0x1104, 3);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x10fe <= address && address <= 0x10ff)
-                    {
-                        // Clock Hours (or two spaces)
-                        msg = new Message("CLOCK", "HHBUFFER", "STRING");
-                        msg.value = decodeString(0x10fe, 2);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x1100 <= address && address <= 0x1101)
-                    {
-                        // Clock Hours (or two spaces)
-                        msg = new Message("CLOCK", "MMBUFFER", "STRING");
-                        msg.value = decodeString(0x1100, 2);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
-                    else if(0x1102 <= address && address <= 0x1103)
-                    {
-                        // Clock Hours (or two spaces)
-                        msg = new Message("CLOCK", "SSBUFFER", "STRING");
-                        msg.value = decodeString(0x1102, 2);
-                        OnStateUpdated(new MessageReadyEventArgs(msg));
-                    }
+                #region Glare Shield
+                    // APU Fire Indicator
+                    msg = new Message("GLARE", "APUFIRE", "INT");
+                    msg.value = (decode(partial, 0x0010, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
 
-                    #endregion
+                    // Left Engine Fire Indicator
+                    msg = new Message("GLARE", "LENGFIRE", "INT");
+                    msg.value = (decode(partial, 0x0008, 3).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Right Engine Fire Indicator
+                    msg = new Message("GLARE", "RENGFIRE", "INT");
+                    msg.value = (decode(partial, 0x0020, 5).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Front Dash 
+                    // CANOPY UNLOCKED Indicator
+                    msg = new Message("DASH", "CANOPYUNLOCKED", "INT");
+                    msg.value = (decode(partial, 0x0004, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // MARKER BEACON Indicator
+                    msg = new Message("DASH", "MARKERBEACON", "INT");
+                    msg.value = (decode(partial, 0x0002, 1).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Nosewheel Steering Indicator
+                    msg = new Message("DASH", "NOSEWHEELSTEERING", "INT");
+                    msg.value = (decode(partial, 0x0001, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1026:
+                    // GUN READY Indicator
+                    msg = new Message("DASH", "GUNREADY", "INT");
+                    msg.value = (decode(partial, 0x0002, 1).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region HUD
+                    // Air Refuel DISCONNECT
+                    msg = new Message("HUD", "AIRREFUELDISCONNECT", "INT");
+                    msg.value = (decode(partial, 0x0200, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Air Refuel LATCHED
+                    msg = new Message("HUD", "AIRREFUELLATCHED", "INT");
+                    msg.value = (decode(partial, 0x0100, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
+                #region Engine Instruments
+                case 0x10be:
+                    // APU RPM Gauge
+                    msg = new Message("ENGINE", "APURPM", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10c0:
+                    // APU Temperature Gauge
+                    msg = new Message("ENGINE", "APUTEMP", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10a8:
+                    // Left Engine Core Speed 
+                    msg = new Message("ENGINE", "LENGCORE", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10a6:
+                    // Left Engine Core Speed Tenth
+                    msg = new Message("ENGINE", "LENGCORET", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10a2:
+                    // Left Engine Fan Speed
+                    msg = new Message("ENGINE", "LENGFAN", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10ae:
+                    // Left Engine Fuel Flow
+                    msg = new Message("ENGINE", "LENGFUELFLOW", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10b4:
+                    // Left Engine Temperature
+                    msg = new Message("ENGINE", "LENGTEMP", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10ba:
+                    // Left Engine Temperature Off
+                    msg = new Message("ENGINE", "LENGTEMPOFF", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10b2:
+                    // Left Engine Temperature Tenth
+                    msg = new Message("ENGINE", "LENGTEMPT", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10c2:
+                    // Left Hydraulic Pressure 
+                    msg = new Message("ENGINE", "LHYDPRESS", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10c6:
+                    // Left Oil Pressure
+                    msg = new Message("ENGINE", "LOILPRESS", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10ac:
+                    // Right Engine Core Speed 
+                    msg = new Message("ENGINE", "RENGCORE", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10aa:
+                    // Right Engine Core Speed Tenth
+                    msg = new Message("ENGINE", "RENGCORET", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10a4:
+                    // Right Engine Fan Speed
+                    msg = new Message("ENGINE", "RENGFAN", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10b0:
+                    // Right Engine Fuel Flow
+                    msg = new Message("ENGINE", "RENGFUELFLOW", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10b8:
+                    // Right Engine Temperature
+                    msg = new Message("ENGINE", "RENGTEMP", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10bc:
+                    // Right Engine Temperature Off
+                    msg = new Message("ENGINE", "RENGTEMPOFF", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10b6:
+                    // Right Engine Temperature Tenth
+                    msg = new Message("ENGINE", "RENGTEMPT", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10c4:
+                    // Right Hydraulic Pressure 
+                    msg = new Message("ENGINE", "RHYDPRESS", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10c8:
+                    // Right Oil Pressure
+                    msg = new Message("ENGINE", "ROILPRESS", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region Environment Control Panel(2)
+                case 0x1134:
+                    // Cabin Pressure Altitude 
+                    msg = new Message("ENVCP", "CABINPRESSALT", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1136:
+                    // Canopy Defog
+                    msg = new Message("ENVCP", "CANOPY_DEFOG", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x113a:
+                    // Flow Level
+                    msg = new Message("ENVCP", "FLOW_LEVEL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x112a:
+                    // Oxygen Indicator Test
+                    msg = new Message("ENVCP", "OXY_TEST", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Windshield Defog/Deice
+                    msg = new Message("ENVCP", "WINDSHIELD_DEFOG", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Windshield Rain Removal/Wash
+                    msg = new Message("ENVCP", "WRRW", "INT");
+                    msg.value = (decode(partial, 0xc000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region IFF
+                    // Mode-3A Wheel 3
+                    msg = new Message("IFF", "MODE3A_WHEEL3", "INT");
+                    msg.value = (decode(partial, 0x0007, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Mode-3A Wheel 4
+                    msg = new Message("IFF", "MODE3A_WHEEL4", "INT");
+                    msg.value = (decode(partial, 0x0038, 3).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    
+                    // TEST Push to Test
+                    msg = new Message("IFF", "TEST_TEST", "INT");
+                    msg.value = (decode(partial, 0x0040, 6).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region Environmental Control Panel(3)
+                case 0x113c:
+                    // Temp Level Control
+                    msg = new Message("ENVCP", "TEMP_LEVEL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1132:
+                    // Oxygen Volume (0 to 5 liters) 
+                    msg = new Message("ENVCP", "OXYVOLUME", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region Fuel System Control Panel
+                case 0x1106:
+                    // Aerial Refueling Slipway Control Lever
+                    msg = new Message("FSCP", "RCVR_LEVER", "INT");
+                    msg.value = (decode(partial, 0x0100, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Fuel Panel
+                    // Fuel Display Selector
+                    msg = new Message("FQIS", "SELECT", "INT");
+                    msg.value = (decode(partial, 0x1c00, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Fuel Gauge Test
+                    msg = new Message("FQIS", "TEST", "INT");
+                    msg.value = (decode(partial, 0x0200, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10d2:
+                    // Fuel Quantity Counter 100
+                    msg = new Message("FQIS", "FUELQTY100", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10d0:
+                    // Fuel Quantity Counter 1000
+                    msg = new Message("FQIS", "FUELQTY1000", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10ce:
+                    // Fuel Quantity Counter 10000
+                    msg = new Message("FQIS", "FUELQTY10000", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10ca:
+                    // Fuel Qty Left 
+                    msg = new Message("FQIS", "FUELQTYL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10cc:
+                    // Fuel Qty Right 
+                    msg = new Message("FQIS", "FUELQTYR", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region HARS
+                case 0x11a6:
+                    // HARS Fast Erect Button 
+                    msg = new Message("HARS", "FAST_ERECT", "INT");
+                    msg.value = (decode(partial, 0x0080, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // HARS MAG VAR
+                    msg = new Message("HARS", "MAGVAR", "INT");
+                    msg.value = (decode(partial, 0xc000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // HARS N/S toggle switch
+                    msg = new Message("HARS", "NS", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // HARS SLAVE-DG Mode
+                    msg = new Message("HARS", "SLAVE_DG", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x11b6:
+                    // HARS Heading
+                    msg = new Message("HARS", "HDG", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x11b4:
+                    // HARS Latitude Dial
+                    msg = new Message("HARS", "LATITUDE", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x11b8:
+                    // HARS Push-to-Sync
+                    msg = new Message("HARS", "PTS", "INT");
+                    msg.value = (decode(partial, 0x0001, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x106c:
+                    // HARS Sync
+                    msg = new Message("HARS", "SYNC", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region HSI
+                case 0x104e:
+                    // HSI Bearing Pointer 1
+                    msg = new Message("HSI", "BEARING1", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1050:
+                    // HSI Bearing Pointer 2
+                    msg = new Message("HSI", "BEARING2", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x104a:
+                    // HSI Bearing Flag
+                    msg = new Message("HSI", "BEARINGFLAG", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1056:
+                    // HSI Course Counter A
+                    msg = new Message("HSI", "CCA", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1058:
+                    // HSI Course Counter B
+                    msg = new Message("HSI", "CCB", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+
+                case 0x1054:
+                    // HSI Course
+                    msg = new Message("HSI", "CRS", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x115a:
+                    // Course Select Knob
+                    msg = new Message("HSI", "CRS_KNOB", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1062:
+                    // HSI Deviation
+                    msg = new Message("HSI", "DEVIATION", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x104c:
+                    // HSI Heading
+                    msg = new Message("HSI", "HDG", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1052:
+                    // HSI Heading Bug
+                    msg = new Message("HSI", "HDGBUG", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x115c:
+                    // Heading Select Knob
+                    msg = new Message("HSI", "HDGKNOB", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1046:
+                    // HSI Poweroff Flag
+                    msg = new Message("HSI", "PWROFFFLAG", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1048:
+                    // HSI Range Flag
+                    msg = new Message("HSI", "RANGEFLAG", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x105a:
+                    // HSI Range Counter A
+                    msg = new Message("HSI", "RCA", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x105c:
+                    // HSI Range Counter B
+                    msg = new Message("HSI", "RCB", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x105e:
+                    // HSI Range Counter C
+                    msg = new Message("HSI", "RCC", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1060:
+                    // HSI Range Counter D
+                    msg = new Message("HSI", "RCD", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1064:
+                    // HSI TO/FROM 1
+                    msg = new Message("HSI", "TOFROM1", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1066:
+                    // HSI TO/FROM 2
+                    msg = new Message("HSI", "TOFROM2", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region IFF
+                case 0x111a:
+                    // IFF Code: ZERO - B - A - (HOLD)
+                    msg = new Message("IFF", "CODE", "INT");
+                    msg.value = (decode(partial, 0xc000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x111e:
+                    // IFF Master: OFF - STBY - LOW - NORM - EMER
+                    msg = new Message("IFF", "MASTER", "INT");
+                    msg.value = (decode(partial, 0xe000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                case 0x1128:
+                    // Mic Ident
+                    msg = new Message("IFF", "MIC_IDENT", "INT");
+                    msg.value = (decode(partial, 0x000c, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Mode-1 Wheel 1
+                    msg = new Message("IFF", "MODE1_WHEEL1", "INT");
+                    msg.value = (decode(partial, 0x0070, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Mode-1 Wheel 2
+                    msg = new Message("IFF", "MODE1_WHEEL2", "INT");
+                    msg.value = (decode(partial, 0x0180, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Mode-3A Wheel 1
+                    msg = new Message("IFF", "MODE3A_WHEEL1", "INT");
+                    msg.value = (decode(partial, 0x0e00, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Mode-3A Wheel 2
+                    msg = new Message("IFF", "MODE3A_WHEEL2", "INT");
+                    msg.value = (decode(partial, 0x7000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // RAD Test/Mon
+                    msg = new Message("IFF", "RADTEST", "INT");
+                    msg.value = (decode(partial, 0x0003, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // REPLY Push to Test
+                    msg = new Message("IFF", "REPLY_TEST", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1122:
+                    // IFF On/Out
+                    msg = new Message("IFF", "ON_OUT", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // IFF Out: LIGHT - OFF - AUDIO
+                    msg = new Message("IFF", "OUT_AUDIO_LIGHT", "INT");
+                    msg.value = (decode(partial, 0x6000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x112c:
+                    // IFF Reply Dim
+                    msg = new Message("IFF", "REPLY_DIM", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x112e:
+                    // TEST Reply Dim
+                    msg = new Message("IFF", "TEST_DIM", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1126:
+                    // Test M-1
+                    msg = new Message("IFF", "TEST_M1", "INT");
+                    msg.value = (decode(partial, 0x0300, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Test M-2
+                    msg = new Message("IFF", "TEST_M2", "INT");
+                    msg.value = (decode(partial, 0x0c00, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    
+                    // Test M-3
+                    msg = new Message("IFF", "TEST_M3", "INT");
+                    msg.value = (decode(partial, 0x3000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Test M-4
+                    msg = new Message("IFF", "TEST_M4", "INT");
+                    msg.value = (decode(partial, 0xc000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
             }
+            #region Strings
+            #region CDU Display
+            if(0x11c0 <= address && address <= 0x11d7)
+            {
+                // CDU Line 1
+                msg = new Message("CDU", "LINE0BUFFER", "STRING");
+                msg.value = decodeString(0x11c0, 24);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x11d8 <= address && address <= 0x11ef)
+            {
+                // CDU Line 2
+                msg = new Message("CDU", "LINE1BUFFER", "STRING");
+                msg.value = decodeString(0x11d8, 24);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x11f0 <= address && address <= 0x1207)
+            {
+                // CDU Line 3
+                msg = new Message("CDU", "LINE2BUFFER", "STRING");
+                msg.value = decodeString(0x11f0, 24);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x1208 <= address && address <= 0x121f)
+            {
+                // CDU Line 4
+                msg = new Message("CDU", "LINE3BUFFER", "STRING");
+                msg.value = decodeString(0x1208, 24);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x1220 <= address && address <= 0x1237)
+            {
+                // CDU Line 5
+                msg = new Message("CDU", "LINE4BUFFER", "STRING");
+                msg.value = decodeString(0x1220, 24);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x1238 <= address && address <= 0x124f)
+            {
+                // CDU Line 6
+                msg = new Message("CDU", "LINE5BUFFER", "STRING");
+                msg.value = decodeString(0x1238, 24);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x1250 <= address && address <= 0x1267)
+            {
+                // CDU Line 7
+                msg = new Message("CDU", "LINE6BUFFER", "STRING");
+                msg.value = decodeString(0x1250, 24);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x1268 <= address && address <= 0x127f)
+            {
+                // CDU Line 8
+                msg = new Message("CDU", "LINE7BUFFER", "STRING");
+                msg.value = decodeString(0x1268, 24);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x1280 <= address && address <= 0x1297)
+            {
+                // CDU Line 9
+                msg = new Message("CDU", "LINE8BUFFER", "STRING");
+                msg.value = decodeString(0x1280, 24);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x1298 <= address && address <= 0x12af)
+            {
+                // CDU Line 10
+                msg = new Message("CDU", "LINE9BUFFER", "STRING");
+                msg.value = decodeString(0x1298, 24);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            #endregion
+            #region CMSC
+            else if(0x10e8 <= address && address <= 0x10ef)
+            {
+                // CMSC Chaff / Flare Amount Display
+                msg = new Message("CMSC", "TXTCHAFFFLAREBUFFER", "STRING");
+                msg.value = decodeString(0x10e8, 8);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x1096 <= address && address <= 0x109d )
+            {
+                // CMSC JMR Status Display
+                msg = new Message("CMSC", "TXTJMRBUFFER", "STRING");
+                msg.value = decodeString(0x1096, 8);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x12b0 <= address && address <= 0x12b7 )
+            {
+                // CMSC MWS Status Display
+                msg = new Message("CMSC", "TXTMWSBUFFER", "STRING");
+                msg.value = decodeString(0x12b0, 8);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            #endregion
+            #region CMSP
+            else if(0x1000 <= address && address <= 0x1012 )
+            {
+                // CMSP Display Line 1
+                msg = new Message("CMSP", "1BUFFER", "STRING");
+                msg.value = decodeString(0x1000, 19);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x1014 <= address && address <= 0x1026 )
+            {
+                // CMSP Display Line 2
+                msg = new Message("CMSP", "2BUFFER", "STRING");
+                msg.value = decodeString(0x1014, 19);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            #endregion
+            #region Digital Clock(2)
+            else if(0x1104 <= address && address <= 0x1106)
+            {
+                // Clock ETC display ('ET', 'C', or three spaces)
+                msg = new Message("CLOCK", "ETCBUFFER", "STRING");
+                msg.value = decodeString(0x1104, 3);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x10fe <= address && address <= 0x10ff)
+            {
+                // Clock Hours (or two spaces)
+                msg = new Message("CLOCK", "HHBUFFER", "STRING");
+                msg.value = decodeString(0x10fe, 2);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x1100 <= address && address <= 0x1101)
+            {
+                // Clock Hours (or two spaces)
+                msg = new Message("CLOCK", "MMBUFFER", "STRING");
+                msg.value = decodeString(0x1100, 2);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x1102 <= address && address <= 0x1103)
+            {
+                // Clock Hours (or two spaces)
+                msg = new Message("CLOCK", "SSBUFFER", "STRING");
+                msg.value = decodeString(0x1102, 2);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            #endregion
+            #endregion
         }
 
         string decodeString(int start, int length)
