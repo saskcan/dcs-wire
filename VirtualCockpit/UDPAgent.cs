@@ -231,7 +231,72 @@ namespace DCSWire
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
-                #region AHCP(1), CMSC(1)
+                #region UFC
+                case 0x10ee:
+                    // 10
+                    msg = new Message("UFC", "10", "INT");
+                    msg.value = (decode(partial, 0x0400, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // 2
+                    msg = new Message("UFC", "2", "INT");
+                    msg.value = (decode(partial, 0x0004, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // 3
+                    msg = new Message("UFC", "3", "INT");
+                    msg.value = (decode(partial, 0x0008, 3).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // 4
+                    msg = new Message("UFC", "4", "INT");
+                    msg.value = (decode(partial, 0x0010, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // 5
+                    msg = new Message("UFC", "5", "INT");
+                    msg.value = (decode(partial, 0x0020, 5).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // 6
+                    msg = new Message("UFC", "6", "INT");
+                    msg.value = (decode(partial, 0x0040, 6).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // 7
+                    msg = new Message("UFC", "7", "INT");
+                    msg.value = (decode(partial, 0x0080, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // 8
+                    msg = new Message("UFC", "8", "INT");
+                    msg.value = (decode(partial, 0x0100, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // 9
+                    msg = new Message("UFC", "9", "INT");
+                    msg.value = (decode(partial, 0x0200, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // CLR
+                    msg = new Message("UFC", "CLR", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // FUNC
+                    msg = new Message("UFC", "FUNC", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // HACK
+                    msg = new Message("UFC", "HACK", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // LTR
+                    msg = new Message("UFC", "LTR", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // SPC
+                    msg = new Message("UFC", "SPC", "INT");
+                    msg.value = (decode(partial, 0x0800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                #endregion
+                    #region AHCP
+                    // IFFCC OFF - TEST - ON 
+                    msg = new Message("AHCP", "IFFCC", "INT");
+                    msg.value = (decode(partial, 0x0003, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
                 case 0x10e8:
                     controlGroup = "AHCP";
                     // AHCP Altimeter Source RADAR - DELTA - BARO
@@ -278,7 +343,8 @@ namespace DCSWire
                     msg = new Message(controlGroup, "TGP", "INT");
                     msg.value = (decode(partial, 0x0100, 8).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
-
+                #endregion
+                #region CMSC
                     // CMSC Toggle between 5 and 16 Priority Threats
                     msg = new Message("CMSC", "PRI", "INT");
                     msg.value = (decode(partial, 0x0001, 0).ToString()); 
@@ -288,13 +354,11 @@ namespace DCSWire
                     msg = new Message("CMSC", "SEP", "INT");
                     msg.value = (decode(partial, 0x0002, 1).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
-                    break;
                 #endregion
-                #region AHCP(2)
-                case 0x10ee:
-                    // IFFCC OFF - TEST - ON 
-                    msg = new Message("AHCP", "IFFCC", "INT");
-                    msg.value = (decode(partial, 0x0003, 0).ToString()); 
+                #region UFC
+                    // 1
+                    msg = new Message("UFC", "1", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
@@ -313,7 +377,7 @@ namespace DCSWire
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
-                #region Accelerometer, Antenna Panel(1)
+                #region Accelerometer
                 case 0x1070:
                     // G Load
                     msg = new Message("ACCEL", "G", "INT");
@@ -340,6 +404,8 @@ namespace DCSWire
                     msg = new Message("ACCEL", "PTS", "INT");
                     msg.value = (decode(partial, 0x0002, 1).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Antenna Panel(1)
 
                     // Antenna Panel IFF Antenna Switch
                     msg = new Message("ANT", "IFF", "INT");
@@ -370,6 +436,32 @@ namespace DCSWire
                     // Video Selector Toggle Switch
                     msg = new Message("DVADR", "VIDEO", "INT");
                     msg.value = (decode(partial, 0x0030, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Misc
+                    // Canopy actuator disengage lever
+                    msg = new Message("MISC", "CANOPY_DISENGAGE", "INT");
+                    msg.value = (decode(partial, 0x0200, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Canopy Jettison
+                    msg = new Message("MISC", "CANOPY_JTSN", "INT");
+                    msg.value = (decode(partial, 0x0400, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Canopy Jettison Unlock
+                    msg = new Message("MISC", "CANOPY_JTSN_UNLOCK", "INT");
+                    msg.value = (decode(partial, 0x0800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Extend Boarding Ladder Button
+                    msg = new Message("MISC", "LADDER_EXTEND", "INT");
+                    msg.value = (decode(partial, 0x0001, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Anti-G Suit Valve Test Button
+                    msg = new Message("MISC", "SUIT_TEST", "INT");
+                    msg.value = (decode(partial, 0x0100, 8).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
@@ -463,14 +555,44 @@ namespace DCSWire
                     msg = new Message("ALCP", "HARSSAS", "INT");
                     msg.value = (decode(partial, 0x8000, 15).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
-                    break;
 
                     // Auxiliary Light Control Panel Nightvision Lights 
                     msg = new Message("ALCP", "NVIS_LTS", "INT");
                     msg.value = (decode(partial, 0x6000, 13).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
-                    break;
+                #endregion
+                #region Landing Gear and Flap Control Panel
+                    // Landing Lights TAXI/OFF/LAND
+                    msg = new Message("LANDING", "LIGHTS", "INT");
+                    msg.value = (decode(partial, 0x1800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Light System Control Panel
+                    // Accelerometer and Compass Lights
+                    msg = new Message("LCP", "ACCEL_COMP", "INT");
+                    msg.value = (decode(partial, 0x0400, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    
+                    // Anticollision Lights
+                    msg = new Message("LCP", "ANTICOLLISION", "INT");
+                    msg.value = (decode(partial, 0x0080, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
 
+                    // Nose Illumination
+                    msg = new Message("LCP", "NOSE_ILLUM", "INT");
+                    msg.value = (decode(partial, 0x0100, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Position Lights FLASH/OFF/STEADY
+                    msg = new Message("LCP", "POSITION", "INT");
+                    msg.value = (decode(partial, 0x000c, 2).ToString()); 
+
+                    // Signal Lights
+                    msg = new Message("LCP", "SIGNAL_LIGHTS", "INT");
+                    msg.value = (decode(partial, 0x0200, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
                 #endregion
                 #region Antenna Panel(2)
                 case 0x11bc:
@@ -478,10 +600,43 @@ namespace DCSWire
                     msg = new Message("ANT", "EGIHQTOD", "INT");
                     msg.value = (decode(partial, 0x0001, 0).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region NMSP
+                    // FM LED
+                    msg = new Message("NMSP", "FMLED", "INT");
+                    msg.value = (decode(partial, 0x0004, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // UHF LED
+                    msg = new Message("NMSP", "UHFLED", "INT");
+                    msg.value = (decode(partial, 0x0002, 1).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region VHF AM Radio
+                    // Frequency Selector 1 Rotation
+                    msg = new Message("VHFAM", "FREQ1ROTVALUE", "INT");
+                    msg.value = (decode(partial, 0x07f8, 3).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
-                #region Glare Shield
+                #region TACAN Panel
                 case 0x1158:
+                    // Right Channel Selector
+                    msg = new Message("TACAN", "1", "INT");
+                    msg.value = (decode(partial, 0xf000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Left Channel Selector
+                    msg = new Message("TACAN", "10", "INT");
+                    msg.value = (decode(partial, 0x0f00, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // TACAN Test Button
+                    msg = new Message("TACAN", "TEST_BTN", "INT");
+                    msg.value = (decode(partial, 0x0080, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Glare Shield
                     // APU Fire T-Handle
                     msg = new Message("GLARE", "FIRE_APU_PULL", "INT");
                     msg.value = (decode(partial, 0x0004, 2).ToString()); 
@@ -502,6 +657,12 @@ namespace DCSWire
                     msg.value = (decode(partial, 0x0008, 3).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                 #endregion
+                #region Standby Attitude Indicator
+                    // Cage SAI
+                    msg = new Message("SAI", "CAGE", "INT");
+                    msg.value = (decode(partial, 0x0040, 6).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
                 #region Auxiliary Light Control Panel(2)
                     // Fire Detect Bleed Air Test 
                     msg = new Message("ALCP", "FDBA_TEST", "INT");
@@ -514,7 +675,6 @@ namespace DCSWire
                     msg.value = (decode(partial, 0xffff, 0).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
-
                 case 0x1152:
                     // Refuel Status Indexer Lights 
                     msg = new Message("ALCP", "RSIL", "INT");
@@ -539,6 +699,18 @@ namespace DCSWire
                     // External Stores Jettison Button
                     msg = new Message("GLARE", "EXT_STORES_JETTISON", "INT");
                     msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Misc
+                    // Ground Safety Override Switch Cover
+                    msg = new Message("MISC", "GND_SAFE_OVERRIDE_COVER", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region TISL Panel
+                    // Code Wheel 1
+                    msg = new Message("TISL", "CODE1", "INT");
+                    msg.value = (decode(partial, 0x1f00, 8).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
@@ -845,6 +1017,30 @@ namespace DCSWire
                     msg = new Message("CDU", "WP", "INT");
                     msg.value = (decode(partial, 0x8000, 15).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Landing Gear and Flap Control Panel
+                    // Landing Gear Horn Silence
+                    msg = new Message("LANDING", "GEAR_HORN_SILENCE", "INT");
+                    msg.value = (decode(partial, 0x0010, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region UFC
+                    // Master Caution Reset
+                    msg = new Message("UFC", "MASTER_CAUTION", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // No Function 4
+                    msg = new Message("UFC", "NA4", "INT");
+                    msg.value = (decode(partial, 0x0001, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // No Function 5
+                    msg = new Message("UFC", "NA5", "INT");
+                    msg.value = (decode(partial, 0x0002, 1).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // No Function 6
+                    msg = new Message("UFC", "NA6", "INT");
+                    msg.value = (decode(partial, 0x0004, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
                 #region CMSC(1)
@@ -896,6 +1092,12 @@ namespace DCSWire
                     msg = new Message("HUD", "AOAINDEXERNORMAL", "INT");
                     msg.value = (decode(partial, 0x2000, 13).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region UFC
+                    // Master Caution Light
+                    msg = new Message("UFC", "MASTERCAUTIONLED", "INT");
+                    msg.value = (decode(partial, 0x0800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
                 #region CMSC(2), CMSP(1)
@@ -946,11 +1148,93 @@ namespace DCSWire
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
-                #region CMSP(2)
+                #region RMFD
                 case 0x10e0:
+                    // OSB 6
+                    msg = new Message("RMFD", "06", "INT");
+                    msg.value = (decode(partial, 0x0001, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 7
+                    msg = new Message("RMFD", "07", "INT");
+                    msg.value = (decode(partial, 0x0002, 1).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 8
+                    msg = new Message("RMFD", "08", "INT");
+                    msg.value = (decode(partial, 0x0004, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 9
+                    msg = new Message("RMFD", "09", "INT");
+                    msg.value = (decode(partial, 0x0008, 3).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 10
+                    msg = new Message("RMFD", "10", "INT");
+                    msg.value = (decode(partial, 0x0010, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 11
+                    msg = new Message("RMFD", "11", "INT");
+                    msg.value = (decode(partial, 0x0020, 5).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 12
+                    msg = new Message("RMFD", "12", "INT");
+                    msg.value = (decode(partial, 0x0040, 6).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 13
+                    msg = new Message("RMFD", "13", "INT");
+                    msg.value = (decode(partial, 0x0080, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 14
+                    msg = new Message("RMFD", "14", "INT");
+                    msg.value = (decode(partial, 0x0100, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 15
+                    msg = new Message("RMFD", "15", "INT");
+                    msg.value = (decode(partial, 0x0200, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 16
+                    msg = new Message("RMFD", "16", "INT");
+                    msg.value = (decode(partial, 0x0400, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 17
+                    msg = new Message("RMFD", "17", "INT");
+                    msg.value = (decode(partial, 0x0800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 18
+                    msg = new Message("RMFD", "18", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 19
+                    msg = new Message("RMFD", "19", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 20
+                    msg = new Message("RMFD", "20", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                    #region CMSP(2)
                     // SET Button 1
                     msg = new Message("CMSP", "ARW1", "INT");
                     msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10e6:
+                    // Brightness 
+                    msg = new Message("CMSP", "BRT", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 case 0x10e2:
@@ -973,12 +1257,36 @@ namespace DCSWire
                     msg = new Message("CMSP", "RTN", "INT");
                     msg.value = (decode(partial, 0x8000, 15).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
-                    break;
+                #endregion
+                #region RMFD
+                    // ADJ
+                    msg = new Message("RMFD", "ADJ", "INT");
+                    msg.value = (decode(partial, 0x0003, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
 
-                case 0x10e6:
-                    // Brightness 
-                    msg = new Message("CMSP", "BRT", "INT");
-                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    // BRT
+                    msg = new Message("RMFD", "BRT", "INT");
+                    msg.value = (decode(partial, 0x0030, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // CON
+                    msg = new Message("RMFD", "CON", "INT");
+                    msg.value = (decode(partial, 0x00c0, 6).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // DSP
+                    msg = new Message("RMFD", "DSP", "INT");
+                    msg.value = (decode(partial, 0x000c, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // PWR OFF - NT - DAY
+                    msg = new Message("RMFD", "PWR", "INT");
+                    msg.value = (decode(partial, 0x0c00, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // SYM
+                    msg = new Message("RMFD", "SYM", "INT");
+                    msg.value = (decode(partial, 0x0300, 8).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
@@ -1532,8 +1840,20 @@ namespace DCSWire
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
-                #region Electrical Power Panel(1)
+                #region SAS Panel
+                case 0x11e0:
+                    // Yaw Trim
+                    msg = new Message("SASP", "YAW_TRIM", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
                 case 0x110c:
+                    // T/O Trim Button
+                    msg = new Message("SASP", "TO_TRIM", "INT");
+                    msg.value = (decode(partial, 0x0001, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Electrical Power Panel(1)
                     // AC GEN PWR Left
                     msg = new Message("EPP", "AC_GEN_PWR_L", "INT");
                     msg.value = (decode(partial, 0x8000, 15).ToString()); 
@@ -1586,8 +1906,71 @@ namespace DCSWire
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
-                #region Electrical Power Panel(2)
+                #region Landing Gear and Flap Control Panel
                 case 0x1110:
+                    // Anti-Skid Switch
+                    msg = new Message("LANDING", "ANTI_SKID_SWITCH", "INT");
+                    msg.value = (decode(partial, 0x0080, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Downlock Override Button
+                    msg = new Message("LANDING", "DOWNLOCK_OVERRIDE", "INT");
+                    msg.value = (decode(partial, 0x0010, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Gear Lever DOWN - UP
+                    msg = new Message("LANDING", "GEAR_LEVER", "INT");
+                    msg.value = (decode(partial, 0x0008, 3).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region NMSP
+                    // EGI Button
+                    msg = new Message("NMSP", "EGI_BTN", "INT");
+                    msg.value = (decode(partial, 0x0400, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // EGI Button LED
+                    msg = new Message("NMSP", "EGILED", "INT");
+                    msg.value = (decode(partial, 0x0800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // HARS Button
+                    msg = new Message("NMSP", "HARS_BTN", "INT");
+                    msg.value = (decode(partial, 0x0100, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // HARS Button LED
+                    msg = new Message("NMSP", "HARSLED", "INT");
+                    msg.value = (decode(partial, 0x0200, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // STEERPT Button
+                    msg = new Message("NMSP", "STEERPT_BTN", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // STEERPT Button LED
+                    msg = new Message("NMSP", "STEERPTLED", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // TISL Button (No Function)
+                    msg = new Message("NMSP", "TISL_BTN", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // TISL Button LED
+                    msg = new Message("NMSP", "TISLLED", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Throttle
+                    // Flaps Setting DN - MVR - UP
+                    msg = new Message("THROTTLE", "FLAPS_SWITCH", "INT");
+                    msg.value = (decode(partial, 0x0060, 5).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Electrical Power Panel(2)
                     // AC GEN PWR Right 
                     msg = new Message("EPP", "AC_GEN_PWR_R", "INT");
                     msg.value = (decode(partial, 0x0001, 0).ToString()); 
@@ -1624,6 +2007,12 @@ namespace DCSWire
                     msg.value = (decode(partial, 0x0200, 9).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                 #endregion
+                #region TACAN
+                    // TACAN Test Indicator Light
+                    msg = new Message("TACAN", "TEST", "INT");
+                    msg.value = (decode(partial, 0x0400, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
                 #region Glare Shield
                     // APU Fire Indicator
                     msg = new Message("GLARE", "APUFIRE", "INT");
@@ -1638,6 +2027,32 @@ namespace DCSWire
                     // Right Engine Fire Indicator
                     msg = new Message("GLARE", "RENGFIRE", "INT");
                     msg.value = (decode(partial, 0x0020, 5).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Left MFCD
+                    // OSB 1
+                    msg = new Message("LMFD", "01", "INT");
+                    msg.value = (decode(partial, 0x0800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 2
+                    msg = new Message("LMFD", "02", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 3
+                    msg = new Message("LMFD", "03", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 4
+                    msg = new Message("LMFD", "04", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 5
+                    msg = new Message("LMFD", "05", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                 #endregion
                 #region Front Dash 
@@ -1671,6 +2086,33 @@ namespace DCSWire
                     // Air Refuel LATCHED
                     msg = new Message("HUD", "AIRREFUELLATCHED", "INT");
                     msg.value = (decode(partial, 0x0100, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Landing Gear and Flap Control Panel
+                    // Left Gear Safe
+                    msg = new Message("LANDING", "GEARLSAFE", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Nose Gear Safe
+                    msg = new Message("LANDING", "GEARNSAFE", "INT");
+                    msg.value = (decode(partial, 0x0800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Right Gear Safe
+                    msg = new Message("LANDING", "GEARRSAFE", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Handle Gear Warning Light
+                    msg = new Message("LANDING", "HANDLEGEARWARNING", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region SAS Panel
+                    // TAKEOFF TRIM Indicator Light
+                    msg = new Message("SASP", "TAKEOFFTRIMLED", "INT");
+                    msg.value = (decode(partial, 0x0400, 10).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
@@ -1846,6 +2288,33 @@ namespace DCSWire
                     msg = new Message("IFF", "TEST_TEST", "INT");
                     msg.value = (decode(partial, 0x0040, 6).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Oxygen Regulator Panel
+                    // Oxygen Normal/100%
+                    msg = new Message("OXY", "DILUTER", "INT");
+                    msg.value = (decode(partial, 0x0200, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Oxygen Flow: Emergency / Normal / Test
+                    msg = new Message("OXY", "EMERGENCY", "INT");
+                    msg.value = (decode(partial, 0x0180, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Flow Indicator (on/off)
+                    msg = new Message("OXY", "FLOW", "INT");
+                    msg.value = (decode(partial, 0x0800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Oxygen Supply On/Off
+                    msg = new Message("OXY", "SUPPLY", "INT");
+                    msg.value = (decode(partial, 0x0400, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1130:
+                    // Oxygen Pressure Indicator
+                    msg = new Message("OXY", "PRESS", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
                 #region Environmental Control Panel(3)
@@ -1867,6 +2336,22 @@ namespace DCSWire
                     // Aerial Refueling Slipway Control Lever
                     msg = new Message("FSCP", "RCVR_LEVER", "INT");
                     msg.value = (decode(partial, 0x0100, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Throttle
+                    // APU Start
+                    msg = new Message("THROTTLE", "ENGINE_APU_START", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    
+                    // Fuel Flow L
+                    msg = new Message("THROTTLE", "ENGINE_FUEL_FLOW_L", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Fuel Flow R
+                    msg = new Message("THROTTLE", "ENGINE_FUEL_FLOW_R", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                 #endregion
                 #region Fuel Panel
@@ -1911,8 +2396,54 @@ namespace DCSWire
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
-                #region HARS
+                #region Intercom Panel(1)
                 case 0x11a6:
+                    // AIM Un-Mute
+                    msg = new Message("INT", "AIM_UNMUTE", "INT");
+                    msg.value = (decode(partial, 0x0004, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Call Button
+                    msg = new Message("INT", "CALL", "INT");
+                    msg.value = (decode(partial, 0x0400, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Call Button
+                    msg = new Message("INT", "HM", "INT");
+                    msg.value = (decode(partial, 0x0040, 6).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // IFF Un-Mute
+                    msg = new Message("INT", "IFF_UNMUTE", "INT");
+                    msg.value = (decode(partial, 0x0008, 3).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // ILS Un-Mute
+                    msg = new Message("INT", "ILS_UNMUTE", "INT");
+                    msg.value = (decode(partial, 0x0010, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Intercom Selector Switch: INT / FM / VHF / HF / Blank
+                    msg = new Message("INT", "MODE", "INT");
+                    msg.value = (decode(partial, 0x0380, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // TCN Un-Mute
+                    msg = new Message("INT", "TCN_UNMUTE", "INT");
+                    msg.value = (decode(partial, 0x0020, 5).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // UHF Un-Mute
+                    msg = new Message("INT", "UHF_UNMUTE", "INT");
+                    msg.value = (decode(partial, 0x0002, 1).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // VHF Un-Mute
+                    msg = new Message("INT", "VHF_UNMUTE", "INT");
+                    msg.value = (decode(partial, 0x0001, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region HARS
                     // HARS Fast Erect Button 
                     msg = new Message("HARS", "FAST_ERECT", "INT");
                     msg.value = (decode(partial, 0x0080, 11).ToString()); 
@@ -1945,16 +2476,73 @@ namespace DCSWire
                     msg.value = (decode(partial, 0xffff, 0).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
+                case 0x106c:
+                    // HARS Sync
+                    msg = new Message("HARS", "SYNC", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
                 case 0x11b8:
                     // HARS Push-to-Sync
                     msg = new Message("HARS", "PTS", "INT");
                     msg.value = (decode(partial, 0x0001, 0).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
-                    break;
-                case 0x106c:
-                    // HARS Sync
-                    msg = new Message("HARS", "SYNC", "INT");
-                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                #endregion
+                #region Misc
+                    // Auxiliary Landing Gear Handle
+                    msg = new Message("MISC", "AUX_GEAR", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Auxiliary Landing Gear Handle Lock Button
+                    msg = new Message("MISC", "AUX_GEAR_LOCK", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Extend Boarding Ladder Button Cover
+                    msg = new Message("MISC", "LADDER_EXTEND_COVER", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Seat Arm Handle (0 = ARM, 1 = DISARM)
+                    msg = new Message("MISC", "SEAT_ARM", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Secure Voice Comms Panel
+                    // Full Switch
+                    msg = new Message("KY58", "1TO5", "INT");
+                    msg.value = (decode(partial, 0x01c0, 6).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Delay Switch
+                    msg = new Message("KY58", "DELAY", "INT");
+                    msg.value = (decode(partial, 0x0008, 3).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Mode Switch
+                    msg = new Message("KY58", "MODE", "INT");
+                    msg.value = (decode(partial, 0x0600, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Full Switch
+                    msg = new Message("KY58", "PLAIN", "INT");
+                    msg.value = (decode(partial, 0x0030, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    
+                    // Power Switch
+                    msg = new Message("KY58", "PWR", "INT");
+                    msg.value = (decode(partial, 0x0800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Zeroize Switch
+                    msg = new Message("KY58", "ZEROIZE", "INT");
+                    msg.value = (decode(partial, 0x0004, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Zeroize Switch Cover
+                    msg = new Message("KY58", "ZEROIZE_COVER", "INT");
+                    msg.value = (decode(partial, 0x0002, 1).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
@@ -2022,7 +2610,7 @@ namespace DCSWire
                     break;
                 case 0x115c:
                     // Heading Select Knob
-                    msg = new Message("HSI", "HDGKNOB", "INT");
+                    msg = new Message("HSI", "HDG_KNOB", "INT");
                     msg.value = (decode(partial, 0xffff, 0).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
@@ -2075,8 +2663,20 @@ namespace DCSWire
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
                 #endregion
-                #region IFF
+                #region Misc
                 case 0x111a:
+                    // Canopy actuator disengage lever
+                    msg = new Message("MISC", "GND_SAFE_OVERRIDE", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region TISL Panel
+                    // Code Wheel 2
+                    msg = new Message("TISL", "CODE2", "INT");
+                    msg.value = (decode(partial, 0x1f00, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region IFF
                     // IFF Code: ZERO - B - A - (HOLD)
                     msg = new Message("IFF", "CODE", "INT");
                     msg.value = (decode(partial, 0xc000, 14).ToString()); 
@@ -2088,7 +2688,6 @@ namespace DCSWire
                     msg.value = (decode(partial, 0xe000, 13).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
-                #endregion
                 case 0x1128:
                     // Mic Ident
                     msg = new Message("IFF", "MIC_IDENT", "INT");
@@ -2125,17 +2724,6 @@ namespace DCSWire
                     msg.value = (decode(partial, 0x8000, 15).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
-                case 0x1122:
-                    // IFF On/Out
-                    msg = new Message("IFF", "ON_OUT", "INT");
-                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
-                    OnStateUpdated(new MessageReadyEventArgs(msg));
-
-                    // IFF Out: LIGHT - OFF - AUDIO
-                    msg = new Message("IFF", "OUT_AUDIO_LIGHT", "INT");
-                    msg.value = (decode(partial, 0x6000, 13).ToString()); 
-                    OnStateUpdated(new MessageReadyEventArgs(msg));
-                    break;
                 case 0x112c:
                     // IFF Reply Dim
                     msg = new Message("IFF", "REPLY_DIM", "INT");
@@ -2169,6 +2757,809 @@ namespace DCSWire
                     msg.value = (decode(partial, 0xc000, 14).ToString()); 
                     OnStateUpdated(new MessageReadyEventArgs(msg));
                     break;
+                case 0x1122:
+                    // IFF On/Out
+                    msg = new Message("IFF", "ON_OUT", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // IFF Out: LIGHT - OFF - AUDIO
+                    msg = new Message("IFF", "OUT_AUDIO_LIGHT", "INT");
+                    msg.value = (decode(partial, 0x6000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region TISL Panel
+                    // Code Wheel 4
+                    msg = new Message("TISL", "CODE4", "INT");
+                    msg.value = (decode(partial, 0x1f00, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region TACAN
+                case 0x1168:
+                    // TACAN Mode Dial
+                    msg = new Message("TACAN", "MODE", "INT");
+                    msg.value = (decode(partial, 0x000e, 1).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // TACAN Channel X/Y Toggle
+                    msg = new Message("TACAN", "XY", "INT");
+                    msg.value = (decode(partial, 0x0001, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                    #region ILS Panel
+                    // ILS Frequency MHz
+                    msg = new Message("ILS", "MHZ", "INT");
+                    msg.value = (decode(partial, 0x0060, 5).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // ILS Power
+                    msg = new Message("ILS", "PWR", "INT");
+                    msg.value = (decode(partial, 0x0010, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // ILS Frequency KHz
+                    msg = new Message("ILS", "KHZ", "INT");
+                    msg.value = (decode(partial, 0x0780, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1174:
+                    // ILS Volume
+                    msg = new Message("ILS", "VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region Misc
+                case 0x119c:
+                    // Canopy Open Switch
+                    msg = new Message("MISC", "CANOPY_OPEN", "INT");
+                    msg.value = (decode(partial, 0x6000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Seat Adjust
+                    msg = new Message("MISC", "SEAT_ADJUST", "INT");
+                    msg.value = (decode(partial, 0x1800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region VHF FM Radio
+                    // Frequency Selector 2
+                    msg = new Message("VHFFM", "FREQ2", "INT");
+                    msg.value = (decode(partial, 0x000f, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Frequency Selector 3
+                    msg = new Message("VHFFM", "FREQ3", "INT");
+                    msg.value = (decode(partial, 0x00f0, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Frequency Selector 4
+                    msg = new Message("VHFFM", "FREQ4", "INT");
+                    msg.value = (decode(partial, 0x0700, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Intercom Panel(2)
+                    // FM Un-Mute
+                    msg = new Message("INT", "FM_UNMUTE", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x11aa:
+                    // AIM Volume
+                    msg = new Message("INT", "AIM_VOLUME", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x11a2:
+                    // FM Volume
+                    msg = new Message("INT", "FM_VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x11ac:
+                    // IFF Volume
+                    msg = new Message("INT", "IFF_VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x11ae:
+                    // ILS Volume
+                    msg = new Message("INT", "ILS_VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x11a0:
+                    // INT Volume
+                    msg = new Message("INT", "INT_VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x11b0:
+                    // TCN Volume
+                    msg = new Message("INT", "TCN_VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x11a8:
+                    // UHF Volume
+                    msg = new Message("INT", "UHF_VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x11a4:
+                    // VHF Volume
+                    msg = new Message("INT", "VHF_VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x11b2:
+                    // Intercom Volume
+                    msg = new Message("INT", "VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1194:
+                    // INT Un-Mute
+                    msg = new Message("INT", "INT_UNMUTE", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region VHF FM Radio
+                    // Frequency Selector 1
+                    msg = new Message("VHFFM", "FREQ1", "INT");
+                    msg.value = (decode(partial, 0x7800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Frequency Selection Dial FM/AM/MAN/PRE
+                    msg = new Message("VHFFM", "FREQEMER", "INT");
+                    msg.value = (decode(partial, 0x0180, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Mode OFF/TR/DF
+                    msg = new Message("VHFFM", "MODE", "INT");
+                    msg.value = (decode(partial, 0x0060, 5).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Preset Channel Selector
+                    msg = new Message("VHFFM", "PRESET", "INT");
+                    msg.value = (decode(partial, 0x001f, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Squelch
+                    msg = new Message("VHFFM", "SQUELCH", "INT");
+                    msg.value = (decode(partial, 0x0600, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region SAS Panel
+                case 0x1108:
+                    // Monitor Test Left/Right
+                    msg = new Message("SASP", "MONITOR_TEST", "INT");
+                    msg.value = (decode(partial, 0xc000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Pitch SAS Left OFF - ENGAGE
+                    msg = new Message("SASP", "PITCH_SAS_L", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Yaw SAS Left OFF - ENGAGE
+                    msg = new Message("SASP", "YAW_SAS_L", "INT");
+                    msg.value = (decode(partial, 0x0400, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Yaw SAS Right OFF - ENGAGE
+                    msg = new Message("SASP", "YAW_SAS_R", "INT");
+                    msg.value = (decode(partial, 0x0800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region LASTE Panel
+                    // AP MODE
+                    msg = new Message("LASTE", "AP_MODE", "INT");
+                    msg.value = (decode(partial, 0x0060, 5).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Autopilot Engage/Disengage
+                    msg = new Message("LASTE", "AP_TOGGLE", "INT");
+                    msg.value = (decode(partial, 0x0080, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // EAC On/Off
+                    msg = new Message("LASTE", "EAC", "INT");
+                    msg.value = (decode(partial, 0x0100, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Radar Altimeter
+                    msg = new Message("LASTE", "RDR_ALTM", "INT");
+                    msg.value = (decode(partial, 0x0200, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Throttle
+                    // ENG OPER L
+                    msg = new Message("THROTTLE", "ENGINE_OPER_L", "INT");
+                    msg.value = (decode(partial, 0x0003, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // ENG OPER R
+                    msg = new Message("THROTTLE", "ENGINE_OPER_R", "INT");
+                    msg.value = (decode(partial, 0x000c, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Landing Gear and Flap Control Panel
+                    // TEMS Data
+                    msg = new Message("LANDING", "ENGINE_TEMS_DATA", "INT");
+                    msg.value = (decode(partial, 0x0010, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10a0:
+                    // Intercom Volume
+                    msg = new Message("LANDING", "FLAPPOS", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region Right MFCD
+                case 0x10dc:
+                    // OSB 1
+                    msg = new Message("RMFD", "01", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Left MFCD
+                    // OSB 6
+                    msg = new Message("LMFD", "06", "INT");
+                    msg.value = (decode(partial, 0x0001, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 7
+                    msg = new Message("LMFD", "07", "INT");
+                    msg.value = (decode(partial, 0x0002, 1).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 8
+                    msg = new Message("LMFD", "08", "INT");
+                    msg.value = (decode(partial, 0x0004, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 9
+                    msg = new Message("LMFD", "09", "INT");
+                    msg.value = (decode(partial, 0x0008, 3).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 10
+                    msg = new Message("LMFD", "10", "INT");
+                    msg.value = (decode(partial, 0x0010, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 11
+                    msg = new Message("LMFD", "11", "INT");
+                    msg.value = (decode(partial, 0x0020, 5).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 12
+                    msg = new Message("LMFD", "12", "INT");
+                    msg.value = (decode(partial, 0x0040, 6).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 13
+                    msg = new Message("LMFD", "13", "INT");
+                    msg.value = (decode(partial, 0x0080, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 14
+                    msg = new Message("LMFD", "14", "INT");
+                    msg.value = (decode(partial, 0x0100, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    
+                    // OSB 15
+                    msg = new Message("LMFD", "15", "INT");
+                    msg.value = (decode(partial, 0x0200, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 16
+                    msg = new Message("LMFD", "16", "INT");
+                    msg.value = (decode(partial, 0x0400, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 17
+                    msg = new Message("LMFD", "17", "INT");
+                    msg.value = (decode(partial, 0x0800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 18
+                    msg = new Message("LMFD", "18", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 19
+                    msg = new Message("LMFD", "19", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 20
+                    msg = new Message("LMFD", "20", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x10de:
+                    // ADJ
+                    msg = new Message("LMFD", "ADJ", "INT");
+                    msg.value = (decode(partial, 0x0003, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    
+                    // BRT
+                    msg = new Message("LMFD", "BRT", "INT");
+                    msg.value = (decode(partial, 0x0030, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // CON
+                    msg = new Message("LMFD", "CON", "INT");
+                    msg.value = (decode(partial, 0x00c0, 6).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // DSP
+                    msg = new Message("LMFD", "DSP", "INT");
+                    msg.value = (decode(partial, 0x000c, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // PWR OFF - NT - DAY
+                    msg = new Message("LMFD", "PWR", "INT");
+                    msg.value = (decode(partial, 0x0c00, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // SYM
+                    msg = new Message("LMFD", "SYM", "INT");
+                    msg.value = (decode(partial, 0x0300, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region RMFD
+                    // OSB 2
+                    msg = new Message("RMFD", "02", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 3
+                    msg = new Message("RMFD", "03", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 4
+                    msg = new Message("RMFD", "04", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // OSB 5
+                    msg = new Message("RMFD", "05", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region Light System Control Panel
+                case 0x114c:
+                    // Aux Instrument Lights
+                    msg = new Message("LCP", "AUX_INST", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1150:
+                    // Console Lights
+                    msg = new Message("LCP", "CONSOLE", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1148:
+                    // Engine Instrument Lights
+                    msg = new Message("LCP", "ENG_INST", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x114a:
+                    // Flight Instrument Lights
+                    msg = new Message("LCP", "FLIGHT_INST", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x114e:
+                    // Flood Lights
+                    msg = new Message("LCP", "FLOOD", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1146:
+                    // Formation Lights
+                    msg = new Message("LCP", "FORMATION", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region Misc
+                case 0x118e:
+                    // Emergency Brake
+                    msg = new Message("MISC", "EMER_BRAKE", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region VHF AM Radio
+                    // Frequency Selector 1
+                    msg = new Message("VHFAM", "FREQ1", "INT");
+                    msg.value = (decode(partial, 0x000f, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Frequency Selector 2
+                    msg = new Message("VHFAM", "FREQ2", "INT");
+                    msg.value = (decode(partial, 0x00f0, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Frequency Selector 3
+                    msg = new Message("VHFAM", "FREQ3", "INT");
+                    msg.value = (decode(partial, 0x0f00, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Frequency Selector 4
+                    msg = new Message("VHFAM", "FREQ4", "INT");
+                    msg.value = (decode(partial, 0x7000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region NMSP
+                case 0x1112:
+                    // Able/Stow Localizer Bars
+                    msg = new Message("NMSP", "ABLE_STOW", "INT");
+                    msg.value = (decode(partial, 0x0040, 6).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // ANCHR Button
+                    msg = new Message("NMSP", "ANCHR_BTN", "INT");
+                    msg.value = (decode(partial, 0x0001, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // ANCHR Button LED
+                    msg = new Message("NMSP", "ANCHRLED", "INT");
+                    msg.value = (decode(partial, 0x0002, 1).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // ILS Button
+                    msg = new Message("NMSP", "ILS_BTN", "INT");
+                    msg.value = (decode(partial, 0x0010, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // ILS Button LED
+                    msg = new Message("NMSP", "ILSLED", "INT");
+                    msg.value = (decode(partial, 0x0020, 5).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // TCN Button
+                    msg = new Message("NMSP", "TCN_BTN", "INT");
+                    msg.value = (decode(partial, 0x0004, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // TCN Button LED
+                    msg = new Message("NMSP", "TCNLED", "INT");
+                    msg.value = (decode(partial, 0x0008, 3).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region TISL Panel
+                    // Altitude Above Target, 10000 ft
+                    msg = new Message("TISL", "ALT_10000", "INT");
+                    msg.value = (decode(partial, 0xf000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // TISL Mode
+                    msg = new Message("TISL", "MODE", "INT");
+                    msg.value = (decode(partial, 0x0380, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // Slant Range UNDER 5 - 5 - 10
+                    msg = new Message("TISL", "SLANT_RANGE", "INT");
+                    msg.value = (decode(partial, 0x0c00, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region RWR
+                case 0x11be:
+                    // Display Brightness
+                    msg = new Message("RWR", "BRT", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region Stall System Volume Controls
+                case 0x116c:
+                    // Peak Volume
+                    msg = new Message("STALL", "PEAK_VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x116a:
+                    // Stall Volume
+                    msg = new Message("STALL", "VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region Standby Attitude Indicator
+                case 0x102a:
+                    // SAI Bank
+                    msg = new Message("SAI", "BANK", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1030:
+                    // SAI Knob Arrow
+                    msg = new Message("SAI", "KNOBARROW", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1028:
+                    // SAI Pitch
+                    msg = new Message("SAI", "PITCH", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x102e:
+                    // SAI Manual Pitch Adjustment
+                    msg = new Message("SAI", "PITCHADJ", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1160:
+                    // SAI Pitch Trim
+                    msg = new Message("SAI", "PITCH_TRIM", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x102c:
+                    // SAI Warning Flag
+                    msg = new Message("SAI", "WARNINGFLAG", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region TACAN
+                case 0x1166:
+                    // TACAN Signal Volume
+                    msg = new Message("TACAN", "VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region TISL Panel
+                case 0x1114:
+                    // Altitude Above Target, 1000 ft
+                    msg = new Message("TISL", "ALT_1000", "INT");
+                    msg.value = (decode(partial, 0x0f00, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // TISL AUX Switch
+                    msg = new Message("TISL", "AUX", "INT");
+                    msg.value = (decode(partial, 0x3000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // BITE
+                    msg = new Message("TISL", "BITE", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+
+                    // ENTER
+                    msg = new Message("TISL", "ENTER", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1120:
+                    // Code Wheel 3
+                    msg = new Message("TISL", "CODE3", "INT");
+                    msg.value = (decode(partial, 0x1f00, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region Throttle
+                    // Friction Control
+                    msg = new Message("THROTTLE", "ENGINE_THROTTLE_FRICTION", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region UFC
+                case 0x10f0:
+                    // ALT ALRT
+                    msg = new Message("UFC", "ALT_ALRT", "INT");
+                    msg.value = (decode(partial, 0x0004, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                    // DATA Up/Down
+                    msg = new Message("UFC", "DATA", "INT");
+                    msg.value = (decode(partial, 0x0060, 5).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // DEPR Up/Down
+                    msg = new Message("UFC", "DEPR", "INT");
+                    msg.value = (decode(partial, 0x0600, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // ENT
+                    msg = new Message("UFC", "ENT", "INT");
+                    msg.value = (decode(partial, 0x0001, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // INTEN Incr/Decr
+                    msg = new Message("UFC", "INTEN", "INT");
+                    msg.value = (decode(partial, 0x1800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // MK
+                    msg = new Message("UFC", "MK", "INT");
+                    msg.value = (decode(partial, 0x0002, 1).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // No Function 1
+                    msg = new Message("UFC", "NA1", "INT");
+                    msg.value = (decode(partial, 0x2000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // No Function 2
+                    msg = new Message("UFC", "NA2", "INT");
+                    msg.value = (decode(partial, 0x4000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // No Function 3
+                    msg = new Message("UFC", "NA3", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // SEL Up/Down
+                    msg = new Message("UFC", "SEL", "INT");
+                    msg.value = (decode(partial, 0x0180, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // STEER Up/Down
+                    msg = new Message("UFC", "STEER", "INT");
+                    msg.value = (decode(partial, 0x0018, 3).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region UHF Radio
+                case 0x1170:
+                    // UHF 100MHz Selector
+                    msg = new Message("UHF", "100MHZ_SEL", "INT");
+                    msg.value = (decode(partial, 0x0300, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // UHF 10MHz Selector
+                    msg = new Message("UHF", "10MHZ_SEL", "INT");
+                    msg.value = (decode(partial, 0x3c00, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1178:
+                    // UHF 1MHz Selector
+                    msg = new Message("UHF", "1MHZ_SEL", "INT");
+                    msg.value = (decode(partial, 0x0f00, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // UHF 0.1HMz Selector
+                    msg = new Message("UHF", "POINT1MHZ_SEL", "INT");
+                    msg.value = (decode(partial, 0xf000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x117a:
+                    // UHF 0.25MHz Selector
+                    msg = new Message("UHF", "POINT25_SEL", "INT");
+                    msg.value = (decode(partial, 0xc000, 14).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1176:
+                    // UHF Preset Channel Selector
+                    msg = new Message("UHF", "PRESET_SEL", "INT");
+                    msg.value = (decode(partial, 0xf800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x117e:
+                    // UHF Volume Control
+                    msg = new Message("UHF", "VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x117c:
+                    // Load Button Cover
+                    msg = new Message("UHF", "COVER", "INT");
+                    msg.value = (decode(partial, 0x0400, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // UHF Function Dial OFF/MAIN/BOTH/ADF
+                    msg = new Message("UHF", "FUNCTION", "INT");
+                    msg.value = (decode(partial, 0x000c, 2).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Load Button
+                    msg = new Message("UHF", "LOAD", "INT");
+                    msg.value = (decode(partial, 0x0200, 9).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Frequency Mode Dial MNL/PRESET/GRD
+                    msg = new Message("UHF", "MODE", "INT");
+                    msg.value = (decode(partial, 0x0003, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Squelch Switch
+                    msg = new Message("UHF", "SQUELCH", "INT");
+                    msg.value = (decode(partial, 0x0040, 6).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Status Button
+                    msg = new Message("UHF", "STATUS", "INT");
+                    msg.value = (decode(partial, 0x0100, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Display Test Button
+                    msg = new Message("UHF", "TEST", "INT");
+                    msg.value = (decode(partial, 0x0080, 7).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // T-Tone Button
+                    msg = new Message("UHF", "T_TONE", "INT");
+                    msg.value = (decode(partial, 0x0030, 4).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region VHF AM Radio
+                    // Preset Channel Selector
+                    msg = new Message("VHFAM", "PRESET", "INT");
+                    msg.value = (decode(partial, 0xf800, 11).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x12b8:
+                    // Frequency Selector 2 Rotation
+                    msg = new Message("VHFAM", "FREQ2ROTVALUE", "INT");
+                    msg.value = (decode(partial, 0x00ff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Frequency Selector 3 Rotation
+                    msg = new Message("VHFAM", "FREQ3ROTVALUE", "INT");
+                    msg.value = (decode(partial, 0xff00, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1186:
+                    // Frequency Selection Dial FM/AM/MAN/PRE
+                    msg = new Message("VHFAM", "FREQEMER", "INT");
+                    msg.value = (decode(partial, 0x0c00, 10).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Load Button
+                    msg = new Message("VHFAM", "LOAD", "INT");
+                    msg.value = (decode(partial, 0x1000, 12).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Mode OFF/TR/DF
+                    msg = new Message("VHFAM", "MODE", "INT");
+                    msg.value = (decode(partial, 0x0300, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Squelch
+                    msg = new Message("VHFAM", "SQUELCH", "INT");
+                    msg.value = (decode(partial, 0x6000, 13).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region VHF FM Radio
+                    // Load Button
+                    msg = new Message("VHFFM", "LOAD", "INT");
+                    msg.value = (decode(partial, 0x8000, 15).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region VHF AM Radio
+                    break;
+                case 0x118c:
+                    // VHF AM Volume Control
+                    msg = new Message("VHFAM", "VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x12ba:
+                    // Frequency Selector 4 Rotation
+                    msg = new Message("VHFAM", "FREQ4ROTVALUE", "INT");
+                    msg.value = (decode(partial, 0x00ff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                #endregion
+                #region VHF FM Radio
+                    // Frequency Selector 1 Rotation
+                    msg = new Message("VHFFM", "FREQ1ROTVALUE", "INT");
+                    msg.value = (decode(partial, 0xff00, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x12bc:
+                    // Frequency Selector 2 Rotation
+                    msg = new Message("VHFFM", "FREQ2ROTVALUE", "INT");
+                    msg.value = (decode(partial, 0x00ff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    // Frequency Selector 3 Rotation
+                    msg = new Message("VHFFM", "FREQ3ROTVALUE", "INT");
+                    msg.value = (decode(partial, 0xff00, 8).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x12be:
+                    // Frequency Selector 4 Rotation
+                    msg = new Message("VHFFM", "FREQ4ROTVALUE", "INT");
+                    msg.value = (decode(partial, 0x00ff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                case 0x1198:
+                    // VHF FM Volume Control
+                    msg = new Message("VHFFM", "VOL", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
+                #region VVI
+                case 0x106e:
+                    // Vertical Velocity Indicator
+                    msg = new Message("VVI", "VVI", "INT");
+                    msg.value = (decode(partial, 0xffff, 0).ToString()); 
+                    OnStateUpdated(new MessageReadyEventArgs(msg));
+                    break;
+                #endregion
             }
             #region Strings
             #region CDU Display
@@ -2309,6 +3700,31 @@ namespace DCSWire
                 // Clock Hours (or two spaces)
                 msg = new Message("CLOCK", "SSBUFFER", "STRING");
                 msg.value = decodeString(0x1102, 2);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            #endregion
+            #region TACAN
+            else if(0x1162 <= address && address <= 0x1165)
+            {
+                // TACAN Channel
+                msg = new Message("TACAN", "CHANNELBUFFER", "STRING");
+                msg.value = decodeString(0x1162, 4);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            #endregion
+            #region UHF Radio
+            else if(0x1180 <= address && address <= 0x1186)
+            {
+                // UHF Frequency Display
+                msg = new Message("UHF", "FREQUENCYBUFFER", "STRING");
+                msg.value = decodeString(0x1180, 7);
+                OnStateUpdated(new MessageReadyEventArgs(msg));
+            }
+            else if(0x1188 <= address && address <= 0x1189)
+            {
+                // UHF Frequency Display
+                msg = new Message("UHF", "PRESETBUFFER", "STRING");
+                msg.value = decodeString(0x1188, 2);
                 OnStateUpdated(new MessageReadyEventArgs(msg));
             }
             #endregion
