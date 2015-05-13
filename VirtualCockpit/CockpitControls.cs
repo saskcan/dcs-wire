@@ -109,7 +109,7 @@ namespace Cockpit
                 {
                     "ALCP", new Panel("ALCP", new NumericInterfaceable[] {
                             new NumericInterfaceable("FDBA_TEST", 0, 1),
-                            new NumericInterfaceable("HARSASS", 0, 1),
+                            new NumericInterfaceable("HARSSAS", 0, 1),
                             new NumericInterfaceable("NVIS_LTS", 0, 2),
                             new NumericInterfaceable("RCVR_LTS", 0, 65535),
                             new NumericInterfaceable("RSIL", 0, 65535),
@@ -565,7 +565,7 @@ namespace Cockpit
                             new NumericInterfaceable("GEARNSAFE", 0, 1),
                             new NumericInterfaceable("GEARRSAFE", 0, 1),
                             new NumericInterfaceable("HANDLEGEARWARNING", 0, 1),
-                            new NumericInterfaceable("LANDING_LIGHTS", 0, 2, false)})
+                            new NumericInterfaceable("LIGHTS", 0, 2)})
                 },
                 {
                     "LMFD", new Panel("LMFD", new NumericInterfaceable[] {
@@ -594,7 +594,7 @@ namespace Cockpit
                             new NumericInterfaceable("CON", 0, 2),
                             new NumericInterfaceable("DSP", 0, 2),
                             new NumericInterfaceable("PWR", 0, 2),
-                            new NumericInterfaceable("SYM", 0, 2)})
+                            new NumericInterfaceable("SYM", 0, 2)}) 
                 },
                 {
                     "LCP", new Panel("LCP", new NumericInterfaceable[] {
