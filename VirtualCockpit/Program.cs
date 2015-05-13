@@ -21,6 +21,11 @@ namespace VirtualCockpit
         static public Form1 ui;
         static public DCSBIOSAgent dcsBiosAgent;
 
+        //diagnostics
+        static public System.Diagnostics.Stopwatch watch;
+        static public int messagecount = 0;
+        static public int charcount = 0;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -29,14 +34,14 @@ namespace VirtualCockpit
         {
 			// initialize the cockpit
             cockpit = new Cockpit.Cockpit();
-            cockpit.StateUpdated += SendMEssage;
+            cockpit.StateUpdated += SendMessage;
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
 			// create a new SerialAgent to send and receive serial data
             //serialAgent = new SerialAgent("COM3", 9600);
-            serialAgent = new SerialAgent("COM3", 9600);
+            serialAgent = new SerialAgent("COM3", 115200);
 			serialAgent.MessageReady += ReceiveMessage;
             serialAgent.Begin();
 
@@ -59,18 +64,25 @@ namespace VirtualCockpit
 		{
             // get the message value type
             string type = e.message.type;
-            if(type == "INT")
+            try
             {
-                cockpit.panels[e.message.controlGroup].numericInterfaceables[e.message.control].SetValue(e.message.value);
+                if (type == "INT")
+                {
+                    cockpit.panels[e.message.controlGroup].numericInterfaceables[e.message.control].SetValue(e.message.value);
+                }
+                else if (type == "STR")
+                {
+                    cockpit.panels[e.message.controlGroup].textInterfaceables[e.message.control].Value = e.message.value;
+                }
             }
-            else if(type == "STR")
+            catch(Exception ex)
             {
-                cockpit.panels[e.message.controlGroup].textInterfaceables[e.message.control].Value = e.message.value;
+
             }
 		}
 
         // messages created when the internal state is updated
-        static public void SendMEssage(object sender, MessageReadyEventArgs e)
+        static public void SendMessage(object sender, MessageReadyEventArgs e)
         {
             dcsBiosAgent.SendMessage(e.message);
             serialAgent.SendMessage(e.message);
